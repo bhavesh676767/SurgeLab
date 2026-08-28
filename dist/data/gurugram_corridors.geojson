@@ -1,0 +1,105 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "Sohna Road — Airia Mall", "highway": "primary" },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [77.028, 28.425], [77.032, 28.418], [77.038, 28.412], [77.042, 28.405]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Sector 67 — AIPL Joy Street", "highway": "secondary" },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [77.058, 28.395], [77.062, 28.393], [77.066, 28.391], [77.070, 28.389]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Sector 66 — Bestech to Sohna Road", "highway": "secondary" },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [77.048, 28.385], [77.050, 28.382], [77.052, 28.378], [77.038, 28.412]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Maruti Kunj Main Gate", "highway": "tertiary" },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [77.074, 28.362], [77.078, 28.361], [77.082, 28.360], [77.086, 28.358]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Bhondsi — Govt School Road", "highway": "tertiary" },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [77.076, 28.350], [77.079, 28.348], [77.081, 28.346], [77.084, 28.343]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Sector 69/70 Belt", "highway": "residential" },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [77.058, 28.375], [77.060, 28.372], [77.063, 28.370], [77.066, 28.368]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Golf Course Road", "highway": "primary" },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [77.092, 28.452], [77.095, 28.448], [77.098, 28.444], [77.100, 28.440]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Golf Course Road Underpass", "highway": "primary" },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [77.096, 28.449], [77.097, 28.448], [77.098, 28.447], [77.099, 28.446]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Southern Peripheral Road (SPR)", "highway": "trunk" },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [77.040, 28.390], [77.050, 28.395], [77.060, 28.400], [77.070, 28.405], [77.080, 28.410]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "NH-48 Corridor", "highway": "motorway" },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [77.020, 28.460], [77.030, 28.455], [77.040, 28.450], [77.050, 28.445]
+        ]
+      }
+    }
+  ]
+}

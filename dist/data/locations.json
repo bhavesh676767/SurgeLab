@@ -1,0 +1,222 @@
+[
+  {
+    "id": "hero_honda_chowk_underpass",
+    "name": "Hero Honda Chowk Underpass",
+    "sector": "Sector 33",
+    "latitude": 28.4361,
+    "longitude": 77.02762,
+    "severity": 3,
+    "depth_cm": 9.6,
+    "incidentCount": 14,
+    "isUnderpass": true
+  },
+  {
+    "id": "rajiv_chowk_junction",
+    "name": "Rajiv Chowk Junction",
+    "sector": "Sector 33",
+    "latitude": 28.45951,
+    "longitude": 77.03139,
+    "severity": 1,
+    "depth_cm": 16.1,
+    "incidentCount": 1,
+    "isUnderpass": false
+  },
+  {
+    "id": "iffco_chowk_underpass",
+    "name": "IFFCO Chowk Underpass",
+    "sector": "Sector 29",
+    "latitude": 28.47167,
+    "longitude": 77.07337,
+    "severity": 2,
+    "depth_cm": 29.5,
+    "incidentCount": 8,
+    "isUnderpass": true
+  },
+  {
+    "id": "signature_tower_underpass",
+    "name": "Signature Tower Underpass",
+    "sector": "Sector 30",
+    "latitude": 28.46214,
+    "longitude": 77.05668,
+    "severity": 2,
+    "depth_cm": 19.5,
+    "incidentCount": 8,
+    "isUnderpass": true
+  },
+  {
+    "id": "subhash_chowk",
+    "name": "Subhash Chowk",
+    "sector": "Sector 47",
+    "latitude": 28.42746,
+    "longitude": 77.04197,
+    "severity": 1,
+    "depth_cm": 9.3,
+    "incidentCount": 6,
+    "isUnderpass": false
+  },
+  {
+    "id": "golf_course_road_underpass_(genpact)",
+    "name": "Golf Course Road Underpass (Genpact)",
+    "sector": "Sector 53",
+    "latitude": 28.44678,
+    "longitude": 77.09727,
+    "severity": 2,
+    "depth_cm": 5.3,
+    "incidentCount": 7,
+    "isUnderpass": true
+  },
+  {
+    "id": "golf_course_extension_road_(vatika_chowk)",
+    "name": "Golf Course Extension Road (Vatika Chowk)",
+    "sector": "Sector 66",
+    "latitude": 28.39859,
+    "longitude": 77.05291,
+    "severity": 2,
+    "depth_cm": 10.1,
+    "incidentCount": 7,
+    "isUnderpass": false
+  },
+  {
+    "id": "medanta_underpass_/_ch_bakhtawar_singh_road",
+    "name": "Medanta Underpass / CH Bakhtawar Singh Road",
+    "sector": "Sector 38",
+    "latitude": 28.43841,
+    "longitude": 77.04083,
+    "severity": 3,
+    "depth_cm": 14.3,
+    "incidentCount": 16,
+    "isUnderpass": true
+  },
+  {
+    "id": "sheetla_mata_mandir_road",
+    "name": "Sheetla Mata Mandir Road",
+    "sector": "Sector 5",
+    "latitude": 28.47601,
+    "longitude": 77.02699,
+    "severity": 1,
+    "depth_cm": 6.9,
+    "incidentCount": 1,
+    "isUnderpass": false
+  },
+  {
+    "id": "railway_station_road",
+    "name": "Railway Station Road",
+    "sector": "Sector 4",
+    "latitude": 28.4821,
+    "longitude": 77.0186,
+    "severity": 1,
+    "depth_cm": 13.7,
+    "incidentCount": 6,
+    "isUnderpass": false
+  },
+  {
+    "id": "khandsa_village_/_drain_crossing",
+    "name": "Khandsa Village / Drain Crossing",
+    "sector": "Sector 37",
+    "latitude": 28.42768,
+    "longitude": 77.01341,
+    "severity": 2,
+    "depth_cm": 33.5,
+    "incidentCount": 9,
+    "isUnderpass": false
+  },
+  {
+    "id": "basai_enclave",
+    "name": "Basai Enclave",
+    "sector": "Sector 9B",
+    "latitude": 28.47017,
+    "longitude": 76.9925,
+    "severity": 1,
+    "depth_cm": 5.8,
+    "incidentCount": 5,
+    "isUnderpass": false
+  },
+  {
+    "id": "southern_peripheral_road_(sector_70_junction)",
+    "name": "Southern Peripheral Road (Sector 70 Junction)",
+    "sector": "Sector 70",
+    "latitude": 28.38792,
+    "longitude": 77.02927,
+    "severity": 1,
+    "depth_cm": 19.4,
+    "incidentCount": 10,
+    "isUnderpass": false
+  },
+  {
+    "id": "southern_peripheral_road_(sector_75)",
+    "name": "Southern Peripheral Road (Sector 75)",
+    "sector": "Sector 75",
+    "latitude": 28.38303,
+    "longitude": 77.01561,
+    "severity": 1,
+    "depth_cm": 13.2,
+    "incidentCount": 8,
+    "isUnderpass": false
+  },
+  {
+    "id": "badshahpur_village_main_chowk",
+    "name": "Badshahpur Village Main Chowk",
+    "sector": "Sector 68",
+    "latitude": 28.36966,
+    "longitude": 77.05068,
+    "severity": 2,
+    "depth_cm": 31.5,
+    "incidentCount": 9,
+    "isUnderpass": false
+  },
+  {
+    "id": "dwarka_expressway_sector_102_crossing",
+    "name": "Dwarka Expressway Sector 102 Crossing",
+    "sector": "Sector 102",
+    "latitude": 28.48941,
+    "longitude": 76.97301,
+    "severity": 2,
+    "depth_cm": 29.8,
+    "incidentCount": 8,
+    "isUnderpass": false
+  },
+  {
+    "id": "dwarka_expressway_sector_104",
+    "name": "Dwarka Expressway Sector 104",
+    "sector": "Sector 104",
+    "latitude": 28.49698,
+    "longitude": 76.98459,
+    "severity": 2,
+    "depth_cm": 8.7,
+    "incidentCount": 10,
+    "isUnderpass": false
+  },
+  {
+    "id": "dwarka_expressway_sector_110",
+    "name": "Dwarka Expressway Sector 110",
+    "sector": "Sector 110",
+    "latitude": 28.52124,
+    "longitude": 77.01173,
+    "severity": 2,
+    "depth_cm": 17.4,
+    "incidentCount": 12,
+    "isUnderpass": false
+  },
+  {
+    "id": "sohna_road_(bhondsi_stretch)",
+    "name": "Sohna Road (Bhondsi Stretch)",
+    "sector": "Sohna Road",
+    "latitude": 28.31528,
+    "longitude": 77.0421,
+    "severity": 1,
+    "depth_cm": 11.2,
+    "incidentCount": 1,
+    "isUnderpass": false
+  },
+  {
+    "id": "pataudi_road_(kadipur_enclave)",
+    "name": "Pataudi Road (Kadipur Enclave)",
+    "sector": "Sector 10",
+    "latitude": 28.46003,
+    "longitude": 76.98425,
+    "severity": 1,
+    "depth_cm": 17.9,
+    "incidentCount": 5,
+    "isUnderpass": false
+  }
+]

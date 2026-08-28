@@ -1,0 +1,174 @@
+incident_id,latitude,longitude,location_name,sector,date,time,severity,depth_cm,duration_minutes,source,source_url,verified
+INC_0001,28.4361,77.02762,Hero Honda Chowk Underpass,Sector 33,2019-07-15,14:15,1,9.6,61,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0002,28.4356,77.02637,Hero Honda Chowk Underpass,Sector 33,2018-08-28,08:30,2,24.0,106,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0003,28.43521,77.02579,Hero Honda Chowk Underpass,Sector 33,2021-09-01,06:30,3,47.8,239,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0004,28.43524,77.02706,Hero Honda Chowk Underpass,Sector 33,2021-07-19,07:45,3,57.9,285,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0005,28.43457,77.02609,Hero Honda Chowk Underpass,Sector 33,2021-07-19,07:45,3,48.4,217,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0006,28.43472,77.02791,Hero Honda Chowk Underpass,Sector 33,2020-08-19,09:00,3,61.2,251,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0007,28.43523,77.02648,Hero Honda Chowk Underpass,Sector 33,2019-07-15,14:15,1,16.4,63,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0008,28.43517,77.02598,Hero Honda Chowk Underpass,Sector 33,2025-07-20,10:10,2,37.9,108,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0009,28.43672,77.02819,Hero Honda Chowk Underpass,Sector 33,2019-07-15,14:15,1,5.1,60,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0010,28.43539,77.02842,Hero Honda Chowk Underpass,Sector 33,2023-07-09,05:00,3,58.3,210,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0011,28.43445,77.02634,Hero Honda Chowk Underpass,Sector 33,2018-08-28,08:30,2,33.4,128,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0012,28.43501,77.02768,Hero Honda Chowk Underpass,Sector 33,2018-08-28,08:30,2,26.4,76,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0013,28.43442,77.02727,Hero Honda Chowk Underpass,Sector 33,2019-07-15,14:15,1,15.4,53,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0014,28.43711,77.02591,Hero Honda Chowk Underpass,Sector 33,2021-07-19,07:45,3,64.5,219,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0015,28.45951,77.03139,Rajiv Chowk Junction,Sector 33,2023-07-09,05:00,1,16.1,71,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0016,28.47167,77.07337,IFFCO Chowk Underpass,Sector 29,2020-08-19,09:00,2,29.5,68,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0017,28.47172,77.07298,IFFCO Chowk Underpass,Sector 29,2023-07-09,05:00,2,20.5,112,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0018,28.47348,77.07382,IFFCO Chowk Underpass,Sector 29,2021-09-01,06:30,2,21.4,88,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0019,28.47313,77.07117,IFFCO Chowk Underpass,Sector 29,2020-08-19,09:00,1,16.0,78,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0020,28.47145,77.07163,IFFCO Chowk Underpass,Sector 29,2021-07-19,07:45,2,26.8,143,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0021,28.47165,77.07145,IFFCO Chowk Underpass,Sector 29,2023-07-09,05:00,2,21.5,133,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0022,28.47351,77.07267,IFFCO Chowk Underpass,Sector 29,2021-09-01,06:30,2,20.9,85,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0023,28.47235,77.07133,IFFCO Chowk Underpass,Sector 29,2018-08-28,08:30,1,15.3,39,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0024,28.46214,77.05668,Signature Tower Underpass,Sector 30,2024-08-11,16:20,1,19.5,80,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0025,28.46451,77.05801,Signature Tower Underpass,Sector 30,2025-07-20,10:10,1,19.9,63,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0026,28.46269,77.05862,Signature Tower Underpass,Sector 30,2023-07-09,05:00,2,30.4,136,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0027,28.46411,77.05724,Signature Tower Underpass,Sector 30,2025-07-20,10:10,1,18.6,50,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0028,28.46354,77.05895,Signature Tower Underpass,Sector 30,2021-09-01,06:30,2,29.8,83,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0029,28.46211,77.05736,Signature Tower Underpass,Sector 30,2021-07-19,07:45,2,30.7,81,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0030,28.46329,77.05698,Signature Tower Underpass,Sector 30,2018-08-28,08:30,1,14.1,44,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0031,28.46224,77.05817,Signature Tower Underpass,Sector 30,2021-07-19,07:45,2,36.3,83,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0032,28.42746,77.04197,Subhash Chowk,Sector 47,2021-09-01,06:30,1,9.3,64,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0033,28.42831,77.04224,Subhash Chowk,Sector 47,2021-07-19,07:45,1,16.0,86,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0034,28.42953,77.04218,Subhash Chowk,Sector 47,2023-07-09,05:00,1,16.2,60,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0035,28.4276,77.0437,Subhash Chowk,Sector 47,2021-09-01,06:30,1,19.1,67,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0036,28.42863,77.04282,Subhash Chowk,Sector 47,2021-07-19,07:45,1,6.7,89,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0037,28.42706,77.04201,Subhash Chowk,Sector 47,2021-09-01,06:30,1,18.8,50,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0038,28.44678,77.09727,Golf Course Road Underpass (Genpact),Sector 53,2020-08-19,09:00,1,5.3,36,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0039,28.44732,77.09688,Golf Course Road Underpass (Genpact),Sector 53,2021-07-19,07:45,1,8.9,52,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0040,28.44847,77.0976,Golf Course Road Underpass (Genpact),Sector 53,2020-08-19,09:00,1,16.5,38,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0041,28.44931,77.09826,Golf Course Road Underpass (Genpact),Sector 53,2024-08-11,16:20,1,14.5,45,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0042,28.44712,77.0993,Golf Course Road Underpass (Genpact),Sector 53,2023-07-09,05:00,2,22.4,111,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0043,28.44752,77.09846,Golf Course Road Underpass (Genpact),Sector 53,2021-09-01,06:30,1,18.1,65,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0044,28.44679,77.09759,Golf Course Road Underpass (Genpact),Sector 53,2021-07-19,07:45,1,6.6,34,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0045,28.39859,77.05291,Golf Course Extension Road (Vatika Chowk),Sector 66,2021-07-19,07:45,1,10.1,73,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0046,28.39682,77.05313,Golf Course Extension Road (Vatika Chowk),Sector 66,2023-07-09,05:00,2,20.4,148,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0047,28.39738,77.05395,Golf Course Extension Road (Vatika Chowk),Sector 66,2021-09-01,06:30,1,11.3,82,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0048,28.39805,77.05462,Golf Course Extension Road (Vatika Chowk),Sector 66,2021-07-19,07:45,1,16.7,51,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0049,28.39897,77.05539,Golf Course Extension Road (Vatika Chowk),Sector 66,2021-07-19,07:45,1,10.6,45,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0050,28.39759,77.05424,Golf Course Extension Road (Vatika Chowk),Sector 66,2024-08-11,16:20,1,9.0,82,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0051,28.39849,77.05478,Golf Course Extension Road (Vatika Chowk),Sector 66,2023-07-09,05:00,1,15.2,67,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0052,28.43841,77.04083,Medanta Underpass / CH Bakhtawar Singh Road,Sector 38,2024-08-11,16:20,1,14.3,88,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0053,28.4393,77.03938,Medanta Underpass / CH Bakhtawar Singh Road,Sector 38,2020-08-19,09:00,2,39.3,90,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0054,28.4393,77.0414,Medanta Underpass / CH Bakhtawar Singh Road,Sector 38,2021-09-01,06:30,2,21.3,112,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0055,28.43844,77.04046,Medanta Underpass / CH Bakhtawar Singh Road,Sector 38,2020-08-19,09:00,2,35.2,62,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0056,28.43747,77.03957,Medanta Underpass / CH Bakhtawar Singh Road,Sector 38,2021-07-19,07:45,2,28.5,100,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0057,28.44025,77.03905,Medanta Underpass / CH Bakhtawar Singh Road,Sector 38,2025-07-20,10:10,1,19.8,54,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0058,28.44008,77.03929,Medanta Underpass / CH Bakhtawar Singh Road,Sector 38,2025-07-20,10:10,1,19.5,41,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0059,28.44001,77.04093,Medanta Underpass / CH Bakhtawar Singh Road,Sector 38,2021-09-01,06:30,2,38.4,115,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0060,28.43858,77.04004,Medanta Underpass / CH Bakhtawar Singh Road,Sector 38,2023-07-09,05:00,3,54.4,138,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0061,28.43838,77.04015,Medanta Underpass / CH Bakhtawar Singh Road,Sector 38,2023-07-09,05:00,3,57.0,244,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0062,28.4398,77.0392,Medanta Underpass / CH Bakhtawar Singh Road,Sector 38,2022-09-22,11:00,1,5.8,62,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0063,28.43953,77.04121,Medanta Underpass / CH Bakhtawar Singh Road,Sector 38,2021-07-19,07:45,2,31.0,133,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0064,28.43876,77.04053,Medanta Underpass / CH Bakhtawar Singh Road,Sector 38,2020-08-19,09:00,2,37.4,79,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0065,28.44033,77.03961,Medanta Underpass / CH Bakhtawar Singh Road,Sector 38,2025-07-20,10:10,1,8.4,89,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0066,28.44032,77.04055,Medanta Underpass / CH Bakhtawar Singh Road,Sector 38,2024-08-11,16:20,1,18.0,73,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0067,28.43963,77.03988,Medanta Underpass / CH Bakhtawar Singh Road,Sector 38,2019-07-15,14:15,1,11.6,73,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0068,28.47601,77.02699,Sheetla Mata Mandir Road,Sector 5,2023-07-09,05:00,1,6.9,36,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0069,28.4821,77.0186,Railway Station Road,Sector 4,2021-07-19,07:45,1,13.7,32,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0070,28.4837,77.01912,Railway Station Road,Sector 4,2023-07-09,05:00,1,18.4,50,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0071,28.48236,77.01708,Railway Station Road,Sector 4,2021-07-19,07:45,1,9.7,70,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0072,28.48225,77.01987,Railway Station Road,Sector 4,2023-07-09,05:00,1,9.3,87,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0073,28.48419,77.0195,Railway Station Road,Sector 4,2023-07-09,05:00,1,10.1,46,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0074,28.4848,77.01867,Railway Station Road,Sector 4,2023-07-09,05:00,1,12.3,54,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0075,28.42768,77.01341,Khandsa Village / Drain Crossing,Sector 37,2023-07-09,05:00,2,33.5,134,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0076,28.42744,77.01341,Khandsa Village / Drain Crossing,Sector 37,2021-07-19,07:45,1,8.4,68,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0077,28.42954,77.01281,Khandsa Village / Drain Crossing,Sector 37,2021-07-19,07:45,1,11.7,65,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0078,28.42847,77.01122,Khandsa Village / Drain Crossing,Sector 37,2021-07-19,07:45,1,13.3,61,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0079,28.42676,77.01325,Khandsa Village / Drain Crossing,Sector 37,2024-08-11,16:20,1,15.6,33,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0080,28.42912,77.01101,Khandsa Village / Drain Crossing,Sector 37,2020-08-19,09:00,1,9.1,80,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0081,28.42754,77.01337,Khandsa Village / Drain Crossing,Sector 37,2023-07-09,05:00,1,6.3,71,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0082,28.42808,77.01216,Khandsa Village / Drain Crossing,Sector 37,2020-08-19,09:00,1,15.0,87,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0083,28.42888,77.01385,Khandsa Village / Drain Crossing,Sector 37,2021-09-01,06:30,1,5.7,51,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0084,28.47017,76.9925,Basai Enclave,Sector 9B,2024-08-11,16:20,1,5.8,76,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0085,28.46855,76.99347,Basai Enclave,Sector 9B,2021-07-19,07:45,1,8.2,70,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0086,28.46763,76.99255,Basai Enclave,Sector 9B,2024-08-11,16:20,1,5.3,37,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0087,28.46864,76.99163,Basai Enclave,Sector 9B,2021-07-19,07:45,1,8.6,87,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0088,28.46789,76.99385,Basai Enclave,Sector 9B,2020-08-19,09:00,1,11.6,65,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0089,28.38792,77.02927,Southern Peripheral Road (Sector 70 Junction),Sector 70,2023-07-09,05:00,1,19.4,61,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0090,28.39063,77.02967,Southern Peripheral Road (Sector 70 Junction),Sector 70,2024-08-11,16:20,1,15.0,39,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0091,28.38839,77.0293,Southern Peripheral Road (Sector 70 Junction),Sector 70,2021-07-19,07:45,1,11.4,31,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0092,28.38783,77.02968,Southern Peripheral Road (Sector 70 Junction),Sector 70,2023-07-09,05:00,1,13.7,51,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0093,28.39045,77.02771,Southern Peripheral Road (Sector 70 Junction),Sector 70,2020-08-19,09:00,1,18.0,46,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0094,28.39055,77.02914,Southern Peripheral Road (Sector 70 Junction),Sector 70,2023-07-09,05:00,1,10.3,83,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0095,28.38947,77.02796,Southern Peripheral Road (Sector 70 Junction),Sector 70,2023-07-09,05:00,1,19.1,60,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0096,28.38893,77.02983,Southern Peripheral Road (Sector 70 Junction),Sector 70,2021-09-01,06:30,1,7.3,82,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0097,28.39025,77.02867,Southern Peripheral Road (Sector 70 Junction),Sector 70,2021-09-01,06:30,1,10.6,84,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0098,28.39012,77.03035,Southern Peripheral Road (Sector 70 Junction),Sector 70,2023-07-09,05:00,1,13.2,72,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0099,28.38303,77.01561,Southern Peripheral Road (Sector 75),Sector 75,2024-08-11,16:20,1,13.2,88,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0100,28.38316,77.01501,Southern Peripheral Road (Sector 75),Sector 75,2020-08-19,09:00,1,10.9,37,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0101,28.3856,77.01397,Southern Peripheral Road (Sector 75),Sector 75,2021-07-19,07:45,1,8.8,67,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0102,28.38472,77.016,Southern Peripheral Road (Sector 75),Sector 75,2021-09-01,06:30,1,9.3,48,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0103,28.38406,77.01536,Southern Peripheral Road (Sector 75),Sector 75,2021-07-19,07:45,1,9.3,55,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0104,28.38506,77.0145,Southern Peripheral Road (Sector 75),Sector 75,2018-08-28,08:30,1,14.5,41,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0105,28.38521,77.01615,Southern Peripheral Road (Sector 75),Sector 75,2018-08-28,08:30,1,5.2,64,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0106,28.38593,77.01381,Southern Peripheral Road (Sector 75),Sector 75,2024-08-11,16:20,1,11.5,45,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0107,28.36966,77.05068,Badshahpur Village Main Chowk,Sector 68,2021-09-01,06:30,2,31.5,66,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0108,28.36728,77.0527,Badshahpur Village Main Chowk,Sector 68,2024-08-11,16:20,1,8.6,32,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0109,28.36997,77.05197,Badshahpur Village Main Chowk,Sector 68,2018-08-28,08:30,1,18.9,85,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0110,28.36803,77.05128,Badshahpur Village Main Chowk,Sector 68,2024-08-11,16:20,1,15.7,65,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0111,28.36875,77.05148,Badshahpur Village Main Chowk,Sector 68,2021-07-19,07:45,2,32.1,139,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0112,28.36965,77.05168,Badshahpur Village Main Chowk,Sector 68,2025-07-20,10:10,1,9.3,78,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0113,28.36999,77.04979,Badshahpur Village Main Chowk,Sector 68,2021-09-01,06:30,2,21.2,90,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0114,28.3672,77.05263,Badshahpur Village Main Chowk,Sector 68,2020-08-19,09:00,1,6.1,42,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0115,28.3677,77.05009,Badshahpur Village Main Chowk,Sector 68,2021-07-19,07:45,2,36.2,73,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0116,28.48941,76.97301,Dwarka Expressway Sector 102 Crossing,Sector 102,2021-09-01,06:30,2,29.8,67,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0117,28.48838,76.97352,Dwarka Expressway Sector 102 Crossing,Sector 102,2020-08-19,09:00,1,13.6,70,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0118,28.48933,76.97519,Dwarka Expressway Sector 102 Crossing,Sector 102,2024-08-11,16:20,1,10.6,41,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0119,28.48812,76.97459,Dwarka Expressway Sector 102 Crossing,Sector 102,2021-09-01,06:30,2,23.7,134,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0120,28.48846,76.97536,Dwarka Expressway Sector 102 Crossing,Sector 102,2018-08-28,08:30,1,12.0,57,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0121,28.48831,76.97512,Dwarka Expressway Sector 102 Crossing,Sector 102,2021-09-01,06:30,2,34.5,70,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0122,28.4872,76.97266,Dwarka Expressway Sector 102 Crossing,Sector 102,2020-08-19,09:00,1,5.5,87,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0123,28.489,76.9754,Dwarka Expressway Sector 102 Crossing,Sector 102,2021-09-01,06:30,2,38.9,139,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0124,28.49698,76.98459,Dwarka Expressway Sector 104,Sector 104,2025-07-20,10:10,1,8.7,58,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0125,28.49869,76.98635,Dwarka Expressway Sector 104,Sector 104,2020-08-19,09:00,1,5.8,30,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0126,28.49734,76.98609,Dwarka Expressway Sector 104,Sector 104,2021-09-01,06:30,2,26.3,122,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0127,28.49751,76.98467,Dwarka Expressway Sector 104,Sector 104,2021-09-01,06:30,2,34.7,107,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0128,28.49834,76.98681,Dwarka Expressway Sector 104,Sector 104,2021-07-19,07:45,2,31.3,119,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0129,28.49892,76.9842,Dwarka Expressway Sector 104,Sector 104,2021-07-19,07:45,2,25.9,144,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0130,28.49768,76.98473,Dwarka Expressway Sector 104,Sector 104,2021-09-01,06:30,2,27.6,132,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0131,28.49917,76.98525,Dwarka Expressway Sector 104,Sector 104,2025-07-20,10:10,1,15.3,61,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0132,28.4968,76.98553,Dwarka Expressway Sector 104,Sector 104,2024-08-11,16:20,1,15.7,34,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0133,28.49795,76.98445,Dwarka Expressway Sector 104,Sector 104,2021-09-01,06:30,2,31.0,96,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0134,28.52124,77.01173,Dwarka Expressway Sector 110,Sector 110,2018-08-28,08:30,1,17.4,32,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0135,28.52121,77.01196,Dwarka Expressway Sector 110,Sector 110,2023-07-09,05:00,2,22.9,134,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0136,28.52145,77.01124,Dwarka Expressway Sector 110,Sector 110,2021-09-01,06:30,2,20.1,148,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0137,28.5229,77.01089,Dwarka Expressway Sector 110,Sector 110,2018-08-28,08:30,1,11.0,76,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0138,28.5208,77.01267,Dwarka Expressway Sector 110,Sector 110,2018-08-28,08:30,1,19.1,40,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0139,28.52199,77.01151,Dwarka Expressway Sector 110,Sector 110,2020-08-19,09:00,1,7.0,43,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0140,28.52009,77.01145,Dwarka Expressway Sector 110,Sector 110,2021-09-01,06:30,2,28.0,147,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0141,28.52163,77.01053,Dwarka Expressway Sector 110,Sector 110,2020-08-19,09:00,1,5.8,55,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0142,28.52135,77.01071,Dwarka Expressway Sector 110,Sector 110,2024-08-11,16:20,1,12.4,56,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0143,28.521,77.01088,Dwarka Expressway Sector 110,Sector 110,2025-07-20,10:10,1,7.3,38,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0144,28.52209,77.01028,Dwarka Expressway Sector 110,Sector 110,2023-07-09,05:00,2,24.6,97,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0145,28.52072,77.01172,Dwarka Expressway Sector 110,Sector 110,2025-07-20,10:10,1,16.1,51,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0146,28.31528,77.0421,Sohna Road (Bhondsi Stretch),Sohna Road,2023-07-09,05:00,1,11.2,42,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0147,28.46003,76.98425,Pataudi Road (Kadipur Enclave),Sector 10,2021-09-01,06:30,1,17.9,75,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0148,28.4601,76.98562,Pataudi Road (Kadipur Enclave),Sector 10,2023-07-09,05:00,1,5.8,73,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0149,28.46102,76.98614,Pataudi Road (Kadipur Enclave),Sector 10,2021-09-01,06:30,1,6.1,69,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0150,28.46149,76.98475,Pataudi Road (Kadipur Enclave),Sector 10,2020-08-19,09:00,1,11.3,57,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0151,28.46246,76.98454,Pataudi Road (Kadipur Enclave),Sector 10,2021-09-01,06:30,1,18.7,80,MCG Flood Control Room & GMDA OneMap,https://onemapgurugram.gmda.gov.in/,1
+INC_0152,28.4789,77.0815,Sahara Mall / Chakkarpur Road,Sector 28,2025-08-14,16:30,2,30.0,120,Citizen Field Report,user_observation,1
+INC_0153,28.4765,77.079,Maruti Vihar & Housing Board,Sector 28,2025-08-14,16:30,2,35.0,150,Citizen Field Report,user_observation,1
+INC_0154,28.4612,77.0821,Sushant Lok Police Station Stretch,Sector 43,2025-08-14,17:00,3,45.0,180,Citizen Field Report,user_observation,1
+INC_0155,28.4895,77.0945,Nathupur Village Road,Sector 24,2025-08-14,17:15,4,60.0,240,Citizen Field Report,user_observation,1
+INC_0156,28.4281,77.119,Ghata Village Stretch,Sector 55,2025-08-14,17:30,3,55.0,210,Citizen Field Report,user_observation,1
+INC_0157,28.4593,77.0725,Millennium City Centre Metro Area,Sector 29,2025-08-14,16:00,3,50.0,200,Citizen Field Report,user_observation,1
+INC_0158,28.4542,77.0745,Fortis Hospital Perimeter Road,Sector 44,2025-08-14,16:15,2,40.0,140,Citizen Field Report,user_observation,1
+INC_0159,28.4811,77.0512,Sukhrali Village Market Stretch,Sector 17,2025-08-14,16:45,3,45.0,160,Citizen Field Report,user_observation,1
+INC_0160,28.4735,77.045,Sector 14 Market Showrooms Frontage,Sector 14,2025-08-14,16:50,2,35.0,130,Citizen Field Report,user_observation,1
+INC_0161,28.4632,77.0315,Sadar Bazar Market Lanes,Sector 11 / Sadar,2025-08-14,17:00,3,45.0,190,Citizen Field Report,user_observation,1
+INC_0162,28.4856,77.0321,Sheetla Mata Mandir Road,Sector 5,2025-08-14,17:10,2,40.0,150,Citizen Field Report,user_observation,1
+INC_0163,28.468,77.0805,Sushant Lok 1 (Blocks A & B),Sushant Lok 1,2025-08-14,17:20,2,40.0,180,Citizen Field Report,user_observation,1
+INC_0164,28.4815,77.091,Sikanderpur Village Main Road,Sector 26,2025-08-14,17:30,3,50.0,220,Citizen Field Report,user_observation,1
+INC_0165,28.4685,77.0678,Leisure Valley Park Perimeter,Sector 29,2025-08-14,18:00,0,0.0,0,Citizen Field Report,user_observation,1
+INC_0166,28.472,77.072,Major Arterial Underpass Corridor,Sector 29 / 31,2025-08-14,16:30,4,75.0,300,Citizen Field Report,user_observation,1
+INC_0167,28.393,77.064,Sector 67 — AIPL Joy Street / Main Dividing Road,Sector 67,2025-08-14,15:00,3,42.0,180,Citizen Field Report / MCG Hotspot Document,user_observation_mcg,1
+INC_0168,28.382,77.052,Sector 66 — Bestech Side toward Sohna Road,Sector 66,2025-08-14,15:15,3,48.0,200,Citizen Field Report / MCG Hotspot Document,user_observation_mcg,1
+INC_0169,28.361118,77.078915,Maruti Kunj Main Gate,Maruti Kunj / Bhondsi,2025-08-14,14:30,4,65.0,280,Citizen Field Report / MCG Hotspot Document,user_observation_mcg,1
+INC_0170,28.3595,77.0765,Sneh Vihar near Dadi Sati Mandir,Ward 19 / Maruti Kunj,2025-08-14,14:45,3,50.0,210,Citizen Field Report / MCG Hotspot Document,user_observation_mcg,1
+INC_0171,28.3475,77.081,Bhondsi Government School Area,Bhondsi,2025-08-14,15:00,3,52.0,220,Citizen Field Report / MCG Hotspot Document,user_observation_mcg,1
+INC_0172,28.418,77.038,Sohna Road — Airia Mall Corridor,Sohna Road / Sector 47,2025-08-14,16:00,4,55.0,240,Citizen Field Report / MCG Hotspot Document,user_observation_mcg,1
+INC_0173,28.372,77.063,Sector 69/70 Waterlogging Belt,Sector 69 / 70,2025-08-14,16:15,3,46.0,190,Citizen Field Report / MCG Hotspot Document,user_observation_mcg,1
