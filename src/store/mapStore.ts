@@ -196,7 +196,7 @@ export const useMapStore = create<MapStore>()(
       userLocationError: null,
       userLocationLoading: false,
       programmaticMove: null,
-      basemapMode: "standard",
+      basemapMode: "satellite",
       showTerrainPaint: true,
       selectedTerrain: null,
 

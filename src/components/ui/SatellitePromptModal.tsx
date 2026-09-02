@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Map as MapIcon, Layers, Check } from "lucide-react";
 import { useMapStore, type BasemapMode } from "@/store/mapStore";
 
@@ -7,7 +7,7 @@ export function SatellitePromptModal() {
   const setBasemapMode = useMapStore((s) => s.setBasemapMode);
 
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState<BasemapMode>(basemapMode);
+  const [selected, setSelected] = useState<BasemapMode>("satellite");
 
   useEffect(() => {
     const hasPrompted = localStorage.getItem("surgelab_satellite_prompted");
