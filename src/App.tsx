@@ -10,7 +10,6 @@ import { WaterloggingSheet } from "@/components/ui/WaterloggingSheet";
 import { FloodedRoadSheet } from "@/components/ui/FloodedRoadSheet";
 import { SettingsPanel } from "@/components/ui/SettingsPanel";
 import { LayerSelector } from "@/components/map/LayerSelector";
-import { RiskLegend } from "@/components/ui/RiskLegend";
 import { OnboardingFlow } from "@/components/ui/OnboardingFlow";
 import { SplashScreen } from "@/components/SplashScreen";
 import { Preloader } from "@/components/Preloader";
@@ -29,7 +28,6 @@ export default function App() {
 
   const setWeather = useMapStore((s) => s.setWeather);
   const appMode = useMapStore((s) => s.appMode);
-  const setSettingsOpen = useMapStore((s) => s.setSettingsOpen);
 
   useEffect(() => {
     // Fast, responsive Preloader & Splash sequence

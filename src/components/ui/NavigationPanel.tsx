@@ -26,7 +26,6 @@ export function NavigationPanel() {
   const setOrigin = useMapStore((s) => s.setOrigin);
   const setDestination = useMapStore((s) => s.setDestination);
   const setPickingLocationOnMap = useMapStore((s) => s.setPickingLocationOnMap);
-  const setNavigating = useMapStore((s) => s.setNavigating);
   const setRouteStage = useMapStore((s) => s.setRouteStage);
   const setRoutes = useMapStore((s) => s.setRoutes);
   const setIsCalculatingRoute = useMapStore((s) => s.setIsCalculatingRoute);
@@ -38,7 +37,6 @@ export function NavigationPanel() {
   const setUserLocationLoading = useMapStore((s) => s.setUserLocationLoading);
   const setAnalyzingProgress = useMapStore((s) => s.setAnalyzingProgress);
   const setAnalyzingText = useMapStore((s) => s.setAnalyzingText);
-  const flyTo = useMapStore((s) => s.flyTo);
 
   const [originQuery, setOriginQuery] = useState(origin?.name ?? '');
   const [destQuery, setDestQuery] = useState(destination?.name ?? '');
@@ -50,7 +48,7 @@ export function NavigationPanel() {
   const analyzeTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const { requestLocation, isLocating } = useLocation({
-    onLocation: useCallback(async (loc, acc) => {
+    onLocation: useCallback(async (loc: { lat: number; lng: number }, acc: number) => {
       if (!isInsideGurugram(loc.lat, loc.lng)) {
         setUserLocationError('Your location is outside Gurugram. SurgeLab is currently active in Gurugram only.');
         setUserLocationLoading(false);

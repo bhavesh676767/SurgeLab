@@ -62,6 +62,7 @@ export function RouteBottomSheet() {
   const idealRoute = useMapStore((s) => s.idealRoute);
   const safeRoute = useMapStore((s) => s.safeRoute);
   const destination = useMapStore((s) => s.destination);
+  const weather = useMapStore((s) => s.weather);
   const activeRouteTab = useMapStore((s) => s.activeRouteTab);
   const isCalculatingRoute = useMapStore((s) => s.isCalculatingRoute);
   const analyzingProgress = useMapStore((s) => s.analyzingProgress);
@@ -71,6 +72,8 @@ export function RouteBottomSheet() {
   const setNavigating = useMapStore((s) => s.setNavigating);
   const setAppMode = useMapStore((s) => s.setAppMode);
   const clearNavigation = useMapStore((s) => s.clearNavigation);
+  const setElevationModalOpen = useMapStore((s) => s.setElevationModalOpen);
+  const setSmartAnalysisOpen = useMapStore((s) => s.setSmartAnalysisOpen);
 
   const [snap, setSnap] = useState<'peek' | 'mid' | 'full'>('peek');
   const [isLoaderMinimized, setIsLoaderMinimized] = useState(false);
@@ -82,6 +85,7 @@ export function RouteBottomSheet() {
 
   if (!isOpen) return null;
 
+  const hazardsOnRoute = idealRoute?.hazardLocations ?? [];
   const safeScore = safeRoute ? Math.max(10, 100 - safeRoute.maxRiskPct) : 92;
   const distSafe = safeRoute ? (safeRoute.distanceMeters / 1000).toFixed(1) : '22.5';
   const timeSafe = safeRoute ? Math.round(safeRoute.durationSeconds / 60) : 33;
@@ -244,6 +248,8 @@ export function RouteBottomSheet() {
       </div>
     );
   }
+
+  if (!safeRoute || !idealRoute) return null;
 
   return (
     <div className="lg:hidden">

@@ -38,7 +38,7 @@ export function OnboardingFlow() {
   const [locationError, setLocationError] = useState('');
 
   const { requestLocation, isLocating } = useLocation({
-    onLocation: useCallback(async (loc, acc) => {
+    onLocation: useCallback(async (loc: { lat: number; lng: number }, acc: number) => {
       setUserLocation(loc, acc);
       try {
         await reverseGeocodeLatLng(loc.lat, loc.lng);

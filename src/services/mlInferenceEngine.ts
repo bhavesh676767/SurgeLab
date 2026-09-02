@@ -58,6 +58,22 @@ export function inferRiskForMlRecord(
   });
 }
 
+export function riskPolygonStyle(riskPct: number) {
+  const color =
+    riskPct >= 75 ? "#9333ea" :
+    riskPct >= 50 ? "#f43f5e" :
+    riskPct >= 30 ? "#f97316" :
+    riskPct >= 15 ? "#eab308" : "#22c55e";
+
+  return {
+    fillColor: color,
+    weight: 1,
+    opacity: 0.8,
+    color: color,
+    fillOpacity: Math.min(0.6, 0.15 + (riskPct / 100) * 0.45),
+  };
+}
+
 export type RiskTier = "low" | "moderate" | "high";
 
 export function riskTier(riskPct: number): RiskTier {

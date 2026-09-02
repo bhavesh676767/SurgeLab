@@ -53,6 +53,15 @@ export interface FloodedRoadInfo {
   updatedMinutesAgo: number;
 }
 
+export interface WaterloggingReport {
+  id: string;
+  location: LatLng;
+  timestamp: number;
+  depthCm?: number;
+  description?: string;
+  confirmed?: boolean;
+}
+
 const DEFAULT_CENTER: LatLng = { lat: 28.4593, lng: 77.0326 };
 const DEFAULT_ZOOM = 13;
 
