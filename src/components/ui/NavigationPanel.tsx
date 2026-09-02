@@ -198,38 +198,27 @@ export function NavigationPanel() {
         </div>
 
         {/* Row 2: Contextual Intelligence Chips (Weather + Flood risk + Smart analysis) */}
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 select-none">
           <ConditionsPill />
 
           {/* Smart hazard chip */}
-          {hazardCount > 0 && hazardCount <= 20 && (
+          {hazardCount > 0 && (
             <button
               type="button"
               onClick={() => useMapStore.getState().setWaterloggingSheetOpen(true)}
-              className="inline-flex items-center gap-1.5 rounded-full bg-amber-50/90 backdrop-blur-sm border border-amber-200/90 px-3 py-1.5 text-xs font-semibold text-amber-800 shadow-xs hover:bg-amber-100 hover:border-amber-300 active:scale-95 transition-all flex-shrink-0"
+              className="inline-flex items-center gap-1.5 rounded-full bg-white/95 backdrop-blur-sm border border-slate-200/90 px-3 py-1.5 text-xs font-semibold text-slate-800 shadow-xs hover:border-slate-300 hover:bg-slate-50 active:scale-95 transition-all flex-shrink-0"
             >
               <AlertTriangle className="h-3.5 w-3.5 text-amber-600" />
-              <span>{hazardCount} hazard{hazardCount > 1 ? 's' : ''} nearby</span>
-            </button>
-          )}
-
-          {hazardCount > 20 && (
-            <button
-              type="button"
-              onClick={() => useMapStore.getState().setWaterloggingSheetOpen(true)}
-              className="inline-flex items-center gap-1.5 rounded-full bg-amber-50/90 backdrop-blur-sm border border-amber-200/90 px-3 py-1.5 text-xs font-semibold text-amber-800 shadow-xs hover:bg-amber-100 hover:border-amber-300 active:scale-95 transition-all flex-shrink-0"
-            >
-              <AlertTriangle className="h-3.5 w-3.5 text-amber-600" />
-              <span>Water-risk areas nearby</span>
+              <span>{hazardCount <= 20 ? `${hazardCount} hazards nearby` : 'Flood zones nearby'}</span>
             </button>
           )}
 
           <button
             type="button"
             onClick={() => useMapStore.getState().setSmartAnalysisOpen(true)}
-            className="inline-flex items-center gap-1.5 rounded-full bg-white/95 backdrop-blur-sm border border-slate-200/90 px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-xs hover:border-slate-300 hover:bg-slate-50 active:scale-95 transition-all flex-shrink-0"
+            className="inline-flex items-center gap-1.5 rounded-full bg-white/95 backdrop-blur-sm border border-slate-200/90 px-3 py-1.5 text-xs font-semibold text-slate-800 shadow-xs hover:border-slate-300 hover:bg-slate-50 active:scale-95 transition-all flex-shrink-0"
           >
-            <Sparkles className="h-3.5 w-3.5 text-sky-500" />
+            <Sparkles className="h-3.5 w-3.5 text-slate-700" />
             <span>Smart Analysis</span>
           </button>
         </div>
