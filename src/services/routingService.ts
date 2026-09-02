@@ -159,14 +159,18 @@ export function evaluateRouteRisk(
   };
 }
 
-async function fetchOsrmUrl(url: string): Promise<OsrmRoute[] | null> {
+async function fetchOsrmUrl(url: string, timeoutMs = 2800): Promise<OsrmRoute[] | null> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const res = await fetch(url);
+    const res = await fetch(url, { signal: controller.signal });
+    clearTimeout(timer);
     if (!res.ok) return null;
     const data: OsrmResponse = await res.json();
     if (data.code !== 'Ok' || !data.routes || data.routes.length === 0) return null;
     return data.routes;
   } catch {
+    clearTimeout(timer);
     return null;
   }
 }
@@ -315,18 +319,19 @@ export async function calculateNavigationRoutes(
       const perpLat = -dLng / len;
       const perpLng = dLat / len;
 
-      // Test multiple gentle offsets (300m, 550m, 800m) on both left and right sides
+      // Test multiple gentle offsets (300m, 550m, 800m) concurrently in parallel
       const candidateOffsets = [0.0035, -0.0035, 0.006, -0.006];
-
-      for (const offset of candidateOffsets) {
+      const detourUrls = candidateOffsets.map((offset) => {
         const candidate: LatLng = {
           lat: peakHazard.lat + perpLat * offset,
           lng: peakHazard.lng + perpLng * offset,
         };
+        return `${OSRM_BASE}/${origin.lng},${origin.lat};${candidate.lng},${candidate.lat};${destination.lng},${destination.lat}?overview=full&geometries=geojson&steps=true`;
+      });
 
-        const detourUrl = `${OSRM_BASE}/${origin.lng},${origin.lat};${candidate.lng},${candidate.lat};${destination.lng},${destination.lat}?overview=full&geometries=geojson&steps=true`;
-        const detourRoutes = await fetchOsrmUrl(detourUrl);
+      const detourResults = await Promise.all(detourUrls.map((u) => fetchOsrmUrl(u, 2200)));
 
+      for (const detourRoutes of detourResults) {
         if (detourRoutes && detourRoutes.length > 0) {
           const detour = detourRoutes[0];
           const detourCoords = detour.geometry.coordinates.map(([lng, lat]) => [lat, lng] as [number, number]);

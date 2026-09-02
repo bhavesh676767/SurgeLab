@@ -126,23 +126,10 @@ export function NavigationPanel() {
       const liveRain = weather?.rain ?? 0;
       const livePrecip = weather?.precipitation ?? 0;
 
-      // Timeout wrapper to guarantee calculation completes within 4 seconds max
-      const routePromise = calculateNavigationRoutes(
+      const { ideal, safe } = await calculateNavigationRoutes(
         origin.location, destination.location,
         mlIndex, incidents, stormIntensity, liveRain, livePrecip,
       );
-
-      const timeoutPromise = new Promise<{ ideal: any; safe: any }>((_, reject) =>
-        setTimeout(() => reject(new Error('Route timeout fallback')), 4000)
-      );
-
-      const { ideal, safe } = await Promise.race([routePromise, timeoutPromise]).catch(() => {
-        // Safe fallback in case of network issue
-        return calculateNavigationRoutes(
-          origin.location, destination.location,
-          mlIndex, incidents, stormIntensity, liveRain, livePrecip,
-        );
-      });
 
       if (analyzeTimerRef.current) clearInterval(analyzeTimerRef.current);
       setAnalyzingProgress(100);
@@ -153,8 +140,9 @@ export function NavigationPanel() {
         setRouteStage('safe');
         setIsCalculatingRoute(false);
         setActiveRouteTab('safe');
-      }, 250);
-    } catch {
+      }, 180);
+    } catch (err) {
+      console.warn('[RoutePipeline] Fallback route applied:', err);
       if (analyzeTimerRef.current) clearInterval(analyzeTimerRef.current);
       setAnalyzingProgress(100);
       setRouteStage('safe');
