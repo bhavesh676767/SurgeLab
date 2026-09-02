@@ -1,9 +1,9 @@
-/**
+﻿/**
  * useNavigationEngine
  *
  * React hook that connects the NavigationEngine to the mapStore.
  * Handles provider selection (GPS vs simulation), starts/stops navigation,
- * and forwards all engine events to the store.
+ * and forwards engine events cleanly without alert flickering.
  */
 
 import { useEffect, useRef } from "react";
@@ -15,8 +15,10 @@ import { useMapStore } from "@/store/mapStore";
 export function useNavigationEngine() {
   const isNavigating = useMapStore((s) => s.isNavigating);
   const safeRoute = useMapStore((s) => s.safeRoute);
+  const idealRoute = useMapStore((s) => s.idealRoute);
   const activeRouteTab = useMapStore((s) => s.activeRouteTab);
   const simulationMode = useMapStore((s) => s.simulationMode);
+  const userLocation = useMapStore((s) => s.userLocation);
 
   const setNavigationPosition = useMapStore((s) => s.setNavigationPosition);
   const setCurrentStepIndex = useMapStore((s) => s.setCurrentStepIndex);
@@ -27,7 +29,8 @@ export function useNavigationEngine() {
   const flyTo = useMapStore((s) => s.flyTo);
 
   const simProviderRef = useRef<SimulationProvider | null>(null);
-  const activeRoute = activeRouteTab === "safe" ? safeRoute : null;
+  const dismissedRerouteRef = useRef(false);
+  const activeRoute = activeRouteTab === "safe" ? safeRoute : (idealRoute ?? safeRoute);
 
   useEffect(() => {
     if (!isNavigating || !activeRoute) {
@@ -35,11 +38,19 @@ export function useNavigationEngine() {
       return;
     }
 
-    // Select provider
-    if (simulationMode) {
+    dismissedRerouteRef.current = false;
+
+    // Check if user location is physically near route start or in simulation
+    const firstCoord = activeRoute.coordinates[0];
+    const isFarFromStart =
+      !userLocation ||
+      Math.hypot(userLocation.lat - firstCoord[0], userLocation.lng - firstCoord[1]) > 0.05; // > ~5km
+
+    // Use simulation if explicitly enabled or on desktop far away from Gurugram route
+    if (simulationMode || isFarFromStart) {
       const sim = new SimulationProvider();
       sim.setRoute(activeRoute.coordinates);
-      sim.setSpeed(35);
+      sim.setSpeed(45);
       simProviderRef.current = sim;
       navigationEngine.setProvider(sim);
     } else {
@@ -55,6 +66,7 @@ export function useNavigationEngine() {
             { lat: event.position.lat, lng: event.position.lng },
             event.position.accuracy
           );
+          // Smooth map follow without abrupt zoom jumps
           flyTo({ lat: event.position.lat, lng: event.position.lng });
           break;
 
@@ -63,17 +75,15 @@ export function useNavigationEngine() {
           break;
 
         case "state":
-          // Sync key state to store
+          // Sync step index only, do NOT spam reroute alerts on state ticks
           setCurrentStepIndex(event.state.currentStepIndex);
-          if (event.state.isOffRoute) {
-            setIsRerouting(true);
-            setShowRerouteAlert(true);
-          }
           break;
 
         case "off_route":
-          setIsRerouting(true);
-          setShowRerouteAlert(true);
+          if (!dismissedRerouteRef.current) {
+            setIsRerouting(true);
+            setShowRerouteAlert(true);
+          }
           break;
 
         case "hazard_ahead":
