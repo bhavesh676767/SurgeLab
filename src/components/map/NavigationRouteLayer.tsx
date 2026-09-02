@@ -77,7 +77,6 @@ export function NavigationRouteLayer() {
   const idealRoute = useMapStore((s) => s.idealRoute);
   const safeRoute = useMapStore((s) => s.safeRoute);
   const routeStage = useMapStore((s) => s.routeStage);
-  const activeRouteTab = useMapStore((s) => s.activeRouteTab);
   const pickingLocationOnMap = useMapStore((s) => s.pickingLocationOnMap);
   const setOrigin = useMapStore((s) => s.setOrigin);
   const setDestination = useMapStore((s) => s.setDestination);
@@ -226,34 +225,36 @@ export function NavigationRouteLayer() {
         </Marker>
       )}
 
-      {/* Yellow Dotted Ideal Route */}
-      {idealRoute && idealRoute.coordinates.length > 0 && (
+      {/* ── YELLOW DOTTED IDEAL ROUTE (always visible once calculated) ── */}
+      {idealRoute && idealRoute.coordinates.length > 0 && routeStage === 'safe' && (
         <>
-          {/* Underlay glow */}
+          {/* Shadow underlay for depth */}
           <Polyline
             positions={idealRoute.coordinates}
             pathOptions={{
-              color: '#ca8a04',
-              weight: routeStage === 'safe' ? 4 : 8,
-              opacity: routeStage === 'safe' ? 0.25 : 0.45,
+              color: '#92400e',
+              weight: 7,
+              opacity: 0.25,
             }}
           />
-          {/* Main animated yellow path */}
+          {/* Main yellow dotted path */}
           <Polyline
             positions={idealRoute.coordinates}
             pathOptions={{
-              color: '#facc15',
-              weight: routeStage === 'safe' ? 3.5 : 5.5,
-              opacity: routeStage === 'safe' ? 0.5 : 0.95,
-              className: routeStage !== 'safe' || activeRouteTab === 'ideal' ? 'animated-route-yellow' : '',
-              dashArray: '10, 12',
+              color: '#f59e0b',
+              weight: 4,
+              opacity: 0.85,
+              dashArray: '6, 10',
+              lineCap: 'round',
+              lineJoin: 'round',
             }}
           />
         </>
       )}
 
-      {/* Hazard Warning Markers on Ideal Route */}
+      {/* ── HAZARD MARKERS on Ideal Route — always shown ── */}
       {idealRoute?.hazardLocations &&
+        routeStage === 'safe' &&
         idealRoute.hazardLocations.map((hazard, i) => (
           <Marker
             key={`hazard-${i}-${hazard.lat}-${hazard.lng}`}
@@ -301,27 +302,25 @@ export function NavigationRouteLayer() {
           </Marker>
         ))}
 
-      {/* Plain Blue Suggested Safe Route */}
-      {safeRoute && safeRoute.coordinates.length > 0 && (
+      {/* ── BLUE SAFE ROUTE (always shown on top, prominent) ── */}
+      {safeRoute && safeRoute.coordinates.length > 0 && routeStage === 'safe' && (
         <>
-          {/* Outer glow layer */}
+          {/* Outer glow */}
           <Polyline
             positions={safeRoute.coordinates}
             pathOptions={{
-              color: '#38bdf8',
-              weight: 9,
-              opacity: 0.35,
-              className: 'safe-route-glow',
+              color: '#7dd3fc',
+              weight: 11,
+              opacity: 0.3,
             }}
           />
-          {/* Solid plain blue path */}
+          {/* Solid blue path */}
           <Polyline
             positions={safeRoute.coordinates}
             pathOptions={{
               color: '#2563eb',
-              weight: 5.5,
+              weight: 6,
               opacity: 0.95,
-              className: 'safe-route-blue',
               lineCap: 'round',
               lineJoin: 'round',
             }}
@@ -329,7 +328,7 @@ export function NavigationRouteLayer() {
         </>
       )}
 
-      {/* Animated Route Scanning Probe during Analysis */}
+      {/* ── SCANNING PROBE during analysis ── */}
       {(routeStage === 'ideal' || routeStage === 'analyzing') && idealRoute && idealRoute.coordinates.length > 0 && (
         <Marker
           position={
