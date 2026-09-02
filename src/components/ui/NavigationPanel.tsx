@@ -198,7 +198,7 @@ export function NavigationPanel() {
         </div>
 
         {/* Row 2: Contextual Intelligence Chips (Weather + Flood risk + Smart analysis) */}
-        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 select-none">
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 select-none pr-1">
           <ConditionsPill />
 
           {/* Smart hazard chip */}
@@ -206,20 +206,20 @@ export function NavigationPanel() {
             <button
               type="button"
               onClick={() => useMapStore.getState().setWaterloggingSheetOpen(true)}
-              className="inline-flex items-center gap-1.5 rounded-full bg-white/95 backdrop-blur-sm border border-slate-200/90 px-3 py-1.5 text-xs font-semibold text-slate-800 shadow-xs hover:border-slate-300 hover:bg-slate-50 active:scale-95 transition-all flex-shrink-0"
+              className="inline-flex items-center gap-1.5 rounded-full bg-white/95 backdrop-blur-sm border border-slate-200/90 px-2.5 py-1 text-[11px] font-semibold text-slate-800 shadow-xs hover:border-slate-300 hover:bg-slate-50 active:scale-95 transition-all flex-shrink-0"
             >
-              <AlertTriangle className="h-3.5 w-3.5 text-amber-600" />
-              <span>{hazardCount <= 20 ? `${hazardCount} hazards nearby` : 'Flood zones nearby'}</span>
+              <AlertTriangle className="h-3 w-3 text-amber-600" />
+              <span>{hazardCount} {hazardCount === 1 ? 'risk spot' : 'risk spots'}</span>
             </button>
           )}
 
           <button
             type="button"
             onClick={() => useMapStore.getState().setSmartAnalysisOpen(true)}
-            className="inline-flex items-center gap-1.5 rounded-full bg-white/95 backdrop-blur-sm border border-slate-200/90 px-3 py-1.5 text-xs font-semibold text-slate-800 shadow-xs hover:border-slate-300 hover:bg-slate-50 active:scale-95 transition-all flex-shrink-0"
+            className="inline-flex items-center gap-1.5 rounded-full bg-white/95 backdrop-blur-sm border border-slate-200/90 px-2.5 py-1 text-[11px] font-semibold text-slate-800 shadow-xs hover:border-slate-300 hover:bg-slate-50 active:scale-95 transition-all flex-shrink-0"
           >
-            <Sparkles className="h-3.5 w-3.5 text-slate-700" />
-            <span>Smart Analysis</span>
+            <Sparkles className="h-3 w-3 text-slate-700" />
+            <span>Analysis</span>
           </button>
         </div>
       </div>

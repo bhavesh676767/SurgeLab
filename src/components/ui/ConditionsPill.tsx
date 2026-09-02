@@ -16,7 +16,7 @@ export function ConditionsPill() {
 
   const rain = weather?.rain ?? 0;
   const { short: riskShort, color: riskColor } = getRiskLabel(stormIntensity);
-  const rainLabel = rain === 0 ? 'Dry' : `${rain} mm/h`;
+  const rainLabel = rain === 0 ? 'Dry' : `${rain}mm`;
 
   return (
     <button
@@ -25,24 +25,24 @@ export function ConditionsPill() {
       aria-label={`Current weather: ${rainLabel}, ${riskShort}. Tap for flood & rain forecast.`}
       aria-expanded={isOpen}
       className={[
-        'inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold border shadow-xs transition-all duration-150 active:scale-95 flex-shrink-0 backdrop-blur-sm select-none',
+        'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold border shadow-xs transition-all duration-150 active:scale-95 flex-shrink-0 backdrop-blur-sm select-none',
         isOpen
           ? 'bg-slate-900 border-slate-900 text-white'
           : 'bg-white/95 border-slate-200/90 text-slate-800 hover:border-slate-300 hover:bg-slate-50',
       ].join(' ')}
     >
       {rain > 10 ? (
-        <CloudRain className={['h-3.5 w-3.5', isOpen ? 'text-white' : 'text-slate-700'].join(' ')} aria-hidden="true" />
+        <CloudRain className={['h-3 w-3', isOpen ? 'text-white' : 'text-slate-700'].join(' ')} aria-hidden="true" />
       ) : rain > 0 ? (
-        <CloudDrizzle className={['h-3.5 w-3.5', isOpen ? 'text-white' : 'text-slate-600'].join(' ')} aria-hidden="true" />
+        <CloudDrizzle className={['h-3 w-3', isOpen ? 'text-white' : 'text-slate-600'].join(' ')} aria-hidden="true" />
       ) : (
-        <Sun className={['h-3.5 w-3.5', isOpen ? 'text-white' : 'text-amber-500'].join(' ')} aria-hidden="true" />
+        <Sun className={['h-3 w-3', isOpen ? 'text-white' : 'text-amber-500'].join(' ')} aria-hidden="true" />
       )}
 
       <span>{rainLabel}</span>
       <span className={isOpen ? 'text-slate-400' : 'text-slate-300'}>·</span>
       <span className={isOpen ? 'text-slate-200' : riskColor}>{riskShort}</span>
-      <ChevronDown className={['h-3 w-3 ml-0.5 transition-transform duration-200', isOpen ? 'rotate-180 text-white' : 'text-slate-400'].join(' ')} aria-hidden="true" />
+      <ChevronDown className={['h-2.5 w-2.5 ml-0.5 transition-transform duration-200', isOpen ? 'rotate-180 text-white' : 'text-slate-400'].join(' ')} aria-hidden="true" />
     </button>
   );
 }
