@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ShieldCheck, Scale, Zap, ChevronDown, ChevronUp, Activity, Droplets, Mountain, CloudRain, Map, GitBranch } from 'lucide-react';
+import { ShieldCheck, Scale, Zap, ChevronDown, ChevronUp, Activity, Droplets, Mountain, CloudRain } from 'lucide-react';
 import { useMapStore } from '@/store/mapStore';
 import type { NavSettings } from '@/store/mapStore';
 import { BottomSheet } from './BottomSheet';

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { ArrowRight, ShieldCheck, Route as RouteIcon, MapPin, Droplets } from 'lucide-react';
 import { useMapStore } from '@/store/mapStore';
 import { useLocation } from '@/hooks/useLocation';

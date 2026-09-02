@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from "react";
-import { Droplets, CloudRain, Mountain, Car, ShieldCheck, ChevronDown, ChevronUp, Layers, Check } from "lucide-react";
+ï»¿import { useState, useRef, useEffect } from "react";
+import { Droplets, CloudRain, Mountain, Car, ChevronDown } from "lucide-react";
 import { useMapStore } from "@/store/mapStore";
 
 interface LegendRow {
@@ -10,10 +10,10 @@ interface LegendRow {
 }
 
 const LEGEND_ROWS: LegendRow[] = [
-  { color: "bg-emerald-500", label: "Dry / Passable", depth: "0–5 cm", textColor: "text-emerald-700" },
-  { color: "bg-amber-400", label: "Surface pooling", depth: "5–15 cm", textColor: "text-amber-700" },
-  { color: "bg-orange-500", label: "Moderate flooding", depth: "15–30 cm", textColor: "text-orange-700" },
-  { color: "bg-rose-500", label: "Dangerous", depth: "30–50 cm", textColor: "text-rose-700" },
+  { color: "bg-emerald-500", label: "Dry / Passable", depth: "0â€“5 cm", textColor: "text-emerald-700" },
+  { color: "bg-amber-400", label: "Surface pooling", depth: "5â€“15 cm", textColor: "text-amber-700" },
+  { color: "bg-orange-500", label: "Moderate flooding", depth: "15â€“30 cm", textColor: "text-orange-700" },
+  { color: "bg-rose-500", label: "Dangerous", depth: "30â€“50 cm", textColor: "text-rose-700" },
   { color: "bg-purple-600", label: "Submerged", depth: "50+ cm", textColor: "text-purple-700" },
 ];
 
@@ -37,7 +37,7 @@ export function WaterRiskLayerControl() {
   }, [isOpen]);
 
   const layerItems = [
-    { key: "waterRisk" as const, Icon: Droplets, label: "Water Risk", desc: "Active · Recommended", alwaysOn: true },
+    { key: "waterRisk" as const, Icon: Droplets, label: "Water Risk", desc: "Active Â· Recommended", alwaysOn: true },
     { key: "rainfall" as const, Icon: CloudRain, label: "Flood Depth & Rain", desc: "Live radar precipitation", alwaysOn: false },
     { key: "terrain" as const, Icon: Mountain, label: "Elevation & Terrain", desc: "Gurugram topographic clearance", alwaysOn: false },
     { key: "traffic" as const, Icon: Car, label: "Traffic Flow", desc: "Coming soon", alwaysOn: false, disabled: true },
@@ -155,4 +155,3 @@ export function WaterRiskLayerControl() {
     </div>
   );
 }
-

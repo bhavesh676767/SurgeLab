@@ -3,7 +3,6 @@ import { Map as MapIcon, Layers, Check } from "lucide-react";
 import { useMapStore, type BasemapMode } from "@/store/mapStore";
 
 export function SatellitePromptModal() {
-  const basemapMode = useMapStore((s) => s.basemapMode);
   const setBasemapMode = useMapStore((s) => s.setBasemapMode);
 
   const [isOpen, setIsOpen] = useState(false);

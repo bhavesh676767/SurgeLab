@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CheckCircle2, ChevronDown, ChevronUp, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { CheckCircle2, ChevronDown, ChevronUp, ShieldCheck } from 'lucide-react';
 import type { RouteResult } from '@/types/dataset';
 
 interface RouteExplainerProps {

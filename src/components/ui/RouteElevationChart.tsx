@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Mountain, Droplets, ShieldCheck, ArrowUpRight } from "lucide-react";
+import { Mountain } from "lucide-react";
 import type { RouteResult } from "@/types/dataset";
 
 interface RouteElevationChartProps {

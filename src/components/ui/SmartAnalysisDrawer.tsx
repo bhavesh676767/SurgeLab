@@ -1,11 +1,10 @@
-import { Activity, ShieldCheck, CloudRain, Mountain, Droplets, Layers, RefreshCw, BarChart2, Eye } from 'lucide-react';
+import { CloudRain, Mountain, Droplets, Layers, Eye } from 'lucide-react';
 import { BottomSheet } from './BottomSheet';
 import { useMapStore } from '@/store/mapStore';
 
 export function SmartAnalysisDrawer() {
   const isOpen = useMapStore((s) => s.isSmartAnalysisOpen);
   const setOpen = useMapStore((s) => s.setSmartAnalysisOpen);
-  const stormIntensity = useMapStore((s) => s.stormIntensity);
   const weather = useMapStore((s) => s.weather);
   const safeRoute = useMapStore((s) => s.safeRoute);
 

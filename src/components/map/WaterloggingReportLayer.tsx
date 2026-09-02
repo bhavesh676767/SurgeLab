@@ -233,7 +233,7 @@ export function WaterloggingReportLayer() {
       .then((data: GeoJSON.FeatureCollection) => {
         const roads = data.features
           .filter((feature) => feature.geometry?.type === "LineString")
-          .map((feature) => feature.geometry.coordinates as Road);
+          .map((feature) => (feature.geometry as GeoJSON.LineString).coordinates as unknown as Road);
         roadIndexRef.current = new RoadLineSpatialIndex(roads);
       })
       .catch(console.error);

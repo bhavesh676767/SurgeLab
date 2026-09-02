@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useMapStore } from '@/store/mapStore';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import { RiskBadge, riskLevelFromPct } from '@/components/ui/RiskBadge';
-import { MapPin, ChevronDown, ChevronUp, Droplets } from 'lucide-react';
+import { MapPin, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface HotspotItem {
   id: string;

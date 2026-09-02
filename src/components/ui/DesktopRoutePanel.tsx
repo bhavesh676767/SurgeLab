@@ -1,6 +1,5 @@
-import { useState } from "react";
-import { ShieldCheck, Zap, AlertTriangle, Play, ChevronDown, ChevronRight, Activity, Mountain, Sparkles, CheckCircle2 } from "lucide-react";
-import { RiskBadge, riskLevelFromPct } from "./RiskBadge";
+﻿import { useState } from "react";
+import { ShieldCheck, Zap, ChevronRight, Mountain, Sparkles } from "lucide-react";
 import { RouteExplainer } from "./RouteExplainer";
 import { RouteElevationChart } from "./RouteElevationChart";
 import { useMapStore } from "@/store/mapStore";
@@ -119,7 +118,7 @@ export function DesktopRoutePanel() {
         </div>
       </div>
 
-      {/* --- TAB 1: SUMMARY --- */}
+      {/* ─── TAB 1: SUMMARY ─── */}
       {activeTab === "summary" && (
         <div className="space-y-3 fade-in">
           {/* PRIMARY RECOMMENDED ROUTE CARD */}
@@ -140,7 +139,7 @@ export function DesktopRoutePanel() {
               <div className="flex items-baseline gap-1.5">
                 <span className="text-3xl font-extrabold text-slate-900 tracking-tight leading-none">{timeSafe}</span>
                 <span className="text-xs font-semibold text-slate-500">min</span>
-                <span className="text-xs font-mono font-medium text-slate-400 ml-1">� {distSafe} km</span>
+                <span className="text-xs font-mono font-medium text-slate-400 ml-1">· {distSafe} km</span>
               </div>
               <span className="text-[11px] font-semibold text-slate-700 bg-white border border-slate-200 px-2 py-0.5 rounded-md font-mono">
                 {timeDiff > 0 ? `+${timeDiff} min vs direct` : "Fastest & Safe"}
@@ -183,20 +182,20 @@ export function DesktopRoutePanel() {
               onClick={() => setActiveTab("routes")}
               className="text-slate-500 hover:text-slate-900 font-medium transition"
             >
-              Compare route trajectories ?
+              Compare route trajectories →
             </button>
             <button
               type="button"
               onClick={() => setActiveTab("intel")}
               className="text-slate-500 hover:text-slate-900 font-medium transition"
             >
-              Elevation profile ?
+              Elevation profile →
             </button>
           </div>
         </div>
       )}
 
-      {/* --- TAB 2: ROUTES COMPARISON --- */}
+      {/* ─── TAB 2: ROUTES COMPARISON ─── */}
       {activeTab === "routes" && (
         <div className="space-y-3 fade-in">
           <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Select Trajectory</p>
@@ -266,13 +265,13 @@ export function DesktopRoutePanel() {
             }}
             className="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 hover:bg-black active:scale-[0.99] py-3 text-sm font-bold text-white shadow-sm transition-all"
           >
-            <span>Start � {activeRouteTab === "safe" ? timeSafe : timeIdeal} min</span>
+            <span>Start — {activeRouteTab === "safe" ? timeSafe : timeIdeal} min</span>
             <ChevronRight className="h-4 w-4" />
           </button>
         </div>
       )}
 
-      {/* --- TAB 3: INTELLIGENCE --- */}
+      {/* ─── TAB 3: INTELLIGENCE ─── */}
       {activeTab === "intel" && (
         <div className="space-y-3 fade-in">
           {/* Elevation Profile */}
@@ -314,4 +313,3 @@ export function DesktopRoutePanel() {
     </div>
   );
 }
-

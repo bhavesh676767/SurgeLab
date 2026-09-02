@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { ShieldCheck, Zap, AlertTriangle, Play, ChevronUp, ChevronDown, Activity, CloudRain, Mountain, Layers, CheckCircle2, X } from 'lucide-react';
+import { ShieldCheck, Zap, AlertTriangle, Play, ChevronDown, Activity, CloudRain, Mountain, X } from 'lucide-react';
 import { BottomSheet } from './BottomSheet';
-import { RiskBadge, riskLevelFromPct } from './RiskBadge';
 import { RouteExplainer } from './RouteExplainer';
 import { RouteElevationChart } from './RouteElevationChart';
 import { ExitConfirmModal } from './ExitConfirmModal';

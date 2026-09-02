@@ -34,7 +34,7 @@ function createDestinationIcon(): L.DivIcon {
   });
 }
 
-function createHazardIcon(name: string, depthCm: number, riskPct: number): L.DivIcon {
+function createHazardIcon(_name: string, depthCm: number, _riskPct: number): L.DivIcon {
   const isSevere = depthCm >= 45;
   const badgeBg = isSevere
     ? "bg-rose-950/90 border-rose-500/80 text-white"

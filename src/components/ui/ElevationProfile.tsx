@@ -5,7 +5,6 @@ import { useMapStore } from '@/store/mapStore';
 export function ElevationProfileModal() {
   const isOpen = useMapStore((s) => s.isElevationModalOpen);
   const setOpen = useMapStore((s) => s.setElevationModalOpen);
-  const safeRoute = useMapStore((s) => s.safeRoute);
 
   if (!isOpen) return null;
 

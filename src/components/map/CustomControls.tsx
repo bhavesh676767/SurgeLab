@@ -1,4 +1,4 @@
-import { Plus, Minus, Locate, Satellite, Droplets, HelpCircle } from "lucide-react";
+import { Plus, Minus, Locate, Satellite, Droplets } from "lucide-react";
 import { useMap } from "react-leaflet";
 import { useLocation } from "@/hooks/useLocation";
 import { useMapStore } from "@/store/mapStore";

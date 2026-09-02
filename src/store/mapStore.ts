@@ -55,12 +55,17 @@ export interface FloodedRoadInfo {
 
 export interface WaterloggingReport {
   id: string;
-  location: LatLng;
-  timestamp: number;
+  lat: number;
+  lng: number;
+  createdAt: string;
+  location?: LatLng;
+  timestamp?: number;
   depthCm?: number;
   description?: string;
   confirmed?: boolean;
 }
+
+export type GroundTruthTool = "brush" | "eraser" | "paint" | "erase" | "inspector";
 
 const DEFAULT_CENTER: LatLng = { lat: 28.4593, lng: 77.0326 };
 const DEFAULT_ZOOM = 13;
@@ -186,6 +191,16 @@ interface MapStore {
   setShowHazardCallout: (show: boolean) => void;
   setShowRerouteAlert: (show: boolean) => void;
 
+  // Ground Truth & Waterlogging Reports
+  waterloggingReports: WaterloggingReport[];
+  isReportingWaterlogging: boolean;
+  groundTruthTool: GroundTruthTool;
+  setWaterloggingReports: (reports: WaterloggingReport[]) => void;
+  addWaterloggingReports: (reports: WaterloggingReport[]) => void;
+  removeWaterloggingReports: (ids: string[]) => void;
+  setIsReportingWaterlogging: (isReporting: boolean) => void;
+  setGroundTruthTool: (tool: GroundTruthTool) => void;
+
   // Actions — Settings
   setNavSettings: (settings: Partial<NavSettings>) => void;
 }
@@ -225,6 +240,9 @@ export const useMapStore = create<MapStore>()(
         riskStreetLines: true,
       },
       floodedRoadInfo: null,
+      waterloggingReports: [],
+      isReportingWaterlogging: false,
+      groundTruthTool: "brush",
 
       // Navigation state
       isNavigating: false,
@@ -380,6 +398,17 @@ export const useMapStore = create<MapStore>()(
       setIsRerouting: (rerouting) => set({ isRerouting: rerouting }),
       setShowHazardCallout: (show) => set({ showHazardCallout: show }),
       setShowRerouteAlert: (show) => set({ showRerouteAlert: show }),
+
+      // Ground Truth & Waterlogging Reports
+      setWaterloggingReports: (reports) => set({ waterloggingReports: reports }),
+      addWaterloggingReports: (reports) =>
+        set((state) => ({ waterloggingReports: [...state.waterloggingReports, ...reports] })),
+      removeWaterloggingReports: (ids) =>
+        set((state) => ({
+          waterloggingReports: state.waterloggingReports.filter((r) => !ids.includes(r.id)),
+        })),
+      setIsReportingWaterlogging: (isReporting) => set({ isReportingWaterlogging: isReporting }),
+      setGroundTruthTool: (tool) => set({ groundTruthTool: tool }),
 
       // Settings
       setNavSettings: (settings) =>

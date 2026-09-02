@@ -119,7 +119,6 @@ function distanceFromIndex(
 // ─── Navigation Engine ────────────────────────────────────────────────────────
 
 const OFF_ROUTE_THRESHOLD_M = 60; // metres off route before flagging deviation
-const STEP_ADVANCE_THRESHOLD_M = 25; // metres to maneuver before advancing step
 const ARRIVAL_THRESHOLD_M = 30;     // metres to destination before declaring arrival
 const HAZARD_WARN_THRESHOLD_M = 800; // warn about hazards within 800m
 
@@ -228,14 +227,6 @@ export class NavigationEngine {
     // Step advancement — find current step based on position
     const steps = route.steps;
     if (steps.length > 0 && this.state.currentStepIndex < steps.length - 1) {
-      const currentStep = steps[this.state.currentStepIndex];
-      const distToManeuver = haversineM(
-        pos.lat, pos.lng,
-        // Use approximate maneuver position (end of current step segment)
-        pos.lat, pos.lng // placeholder — use step distance accumulation
-      );
-      void distToManeuver; // suppress unused
-
       // Advance step if we've covered enough of the route
       const stepProgressThreshold =
         (this.state.currentStepIndex + 1) / steps.length;
@@ -289,9 +280,6 @@ export class NavigationEngine {
     return { ...this.state };
   }
 }
-
-// Suppress unused variable lint warning
-const _: unknown = undefined;
 
 // Singleton instance
 export const navigationEngine = new NavigationEngine();
