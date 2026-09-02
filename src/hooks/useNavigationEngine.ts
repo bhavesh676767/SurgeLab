@@ -14,10 +14,12 @@ import { useMapStore } from "@/store/mapStore";
 
 export function useNavigationEngine() {
   const isNavigating = useMapStore((s) => s.isNavigating);
+  const appMode = useMapStore((s) => s.appMode);
   const safeRoute = useMapStore((s) => s.safeRoute);
   const idealRoute = useMapStore((s) => s.idealRoute);
   const activeRouteTab = useMapStore((s) => s.activeRouteTab);
   const simulationMode = useMapStore((s) => s.simulationMode);
+  const userLocation = useMapStore((s) => s.userLocation);
 
   const setNavigationPosition = useMapStore((s) => s.setNavigationPosition);
   const setCurrentStepIndex = useMapStore((s) => s.setCurrentStepIndex);
@@ -31,16 +33,26 @@ export function useNavigationEngine() {
   const dismissedRerouteRef = useRef(false);
   const activeRoute = activeRouteTab === "safe" ? safeRoute : (idealRoute ?? safeRoute);
 
+  // Only run navigation engine when user explicitly starts navigation (appMode === 'navigating')
+  // NOT during route preview ('routes' mode) — this stops the map from auto-panning
+  const shouldNavigate = isNavigating && appMode === 'navigating';
+
   useEffect(() => {
-    if (!isNavigating || !activeRoute) {
+    if (!shouldNavigate || !activeRoute) {
       navigationEngine.stopNavigation();
       return;
     }
 
     dismissedRerouteRef.current = false;
 
-    // Only use simulation when explicitly enabled in Settings
-    if (simulationMode) {
+    // Check if user location is physically near route start or in simulation
+    const firstCoord = activeRoute.coordinates[0];
+    const isFarFromStart =
+      !userLocation ||
+      Math.hypot(userLocation.lat - firstCoord[0], userLocation.lng - firstCoord[1]) > 0.05; // > ~5km
+
+    // Use simulation if explicitly enabled or on desktop far away from route start
+    if (simulationMode || isFarFromStart) {
       const sim = new SimulationProvider();
       sim.setRoute(activeRoute.coordinates);
       sim.setSpeed(45);
@@ -59,8 +71,10 @@ export function useNavigationEngine() {
             { lat: event.position.lat, lng: event.position.lng },
             event.position.accuracy
           );
-          // Smooth map follow without abrupt zoom jumps
-          flyTo({ lat: event.position.lat, lng: event.position.lng });
+          // Only pan map during active navigation, not route preview
+          if (appMode === 'navigating') {
+            flyTo({ lat: event.position.lat, lng: event.position.lng });
+          }
           break;
 
         case "step_advance":
@@ -106,7 +120,8 @@ export function useNavigationEngine() {
       setShowRerouteAlert(false);
     };
   }, [
-    isNavigating,
+    shouldNavigate,
+    appMode,
     simulationMode,
     activeRoute?.coordinates,
     setNavigationPosition,
@@ -118,3 +133,4 @@ export function useNavigationEngine() {
     flyTo,
   ]);
 }
+
