@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { ShieldCheck, Zap, AlertTriangle, Play, ChevronUp, ChevronDown, Activity, CloudRain, Mountain, Layers, CheckCircle2 } from 'lucide-react';
+import { ShieldCheck, Zap, AlertTriangle, Play, ChevronUp, ChevronDown, Activity, CloudRain, Mountain, Layers, CheckCircle2, X } from 'lucide-react';
 import { BottomSheet } from './BottomSheet';
 import { RiskBadge, riskLevelFromPct } from './RiskBadge';
 import { RouteExplainer } from './RouteExplainer';
 import { RouteElevationChart } from './RouteElevationChart';
+import { ExitConfirmModal } from './ExitConfirmModal';
 import { useMapStore } from '@/store/mapStore';
 
 function SafetyScoreBar({ score, safeRoute, idealRoute }: { score: number; safeRoute?: any; idealRoute?: any }) {
@@ -55,40 +56,6 @@ function SafetyScoreBar({ score, safeRoute, idealRoute }: { score: number; safeR
   );
 }
 
-function AnalyzingState({ progress, text }: { progress: number; text: string }) {
-  return (
-    <div className="p-4 space-y-4">
-      <div>
-        <div className="flex items-center justify-between mb-2">
-          <p className="text-sm font-bold text-slate-900">Analysing street conditions…</p>
-          <span className="text-xs font-mono text-sky-500 font-bold">{progress}%</span>
-        </div>
-        <div className="h-1.5 w-full rounded-full bg-slate-100 overflow-hidden">
-          <div
-            className="h-full rounded-full bg-sky-500 transition-all duration-100"
-            style={{ width: `${progress}%` }}
-            role="progressbar"
-            aria-valuenow={progress}
-            aria-valuemin={0}
-            aria-valuemax={100}
-          />
-        </div>
-        <p className="mt-2 text-xs text-slate-500 animate-pulse">{text}</p>
-      </div>
-      <div className="grid grid-cols-2 gap-3">
-        {[0, 1].map((i) => (
-          <div key={i} className="rounded-2xl border border-slate-100 p-3 space-y-2">
-            <div className="skeleton h-3 w-3/4 rounded" />
-            <div className="skeleton h-6 w-1/2 rounded" />
-            <div className="skeleton h-3 w-full rounded" />
-            <div className="skeleton h-8 w-full rounded-xl" />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 export function RouteBottomSheet() {
   const appMode = useMapStore((s) => s.appMode);
   const routeStage = useMapStore((s) => s.routeStage);
@@ -99,17 +66,16 @@ export function RouteBottomSheet() {
   const isCalculatingRoute = useMapStore((s) => s.isCalculatingRoute);
   const analyzingProgress = useMapStore((s) => s.analyzingProgress);
   const analyzingText = useMapStore((s) => s.analyzingText);
-  const weather = useMapStore((s) => s.weather);
 
   const setActiveRouteTab = useMapStore((s) => s.setActiveRouteTab);
   const setNavigating = useMapStore((s) => s.setNavigating);
   const setAppMode = useMapStore((s) => s.setAppMode);
   const clearNavigation = useMapStore((s) => s.clearNavigation);
-  const setSmartAnalysisOpen = useMapStore((s) => s.setSmartAnalysisOpen);
-  const setElevationModalOpen = useMapStore((s) => s.setElevationModalOpen);
 
   const [snap, setSnap] = useState<'peek' | 'mid' | 'full'>('peek');
   const [isLoaderMinimized, setIsLoaderMinimized] = useState(false);
+  const [isSheetMinimized, setIsSheetMinimized] = useState(false);
+  const [showExitModal, setShowExitModal] = useState(false);
 
   const isOpen = appMode === 'routes';
   const analysisInProgress = routeStage === 'ideal' || routeStage === 'analyzing' || isCalculatingRoute;
@@ -123,104 +89,178 @@ export function RouteBottomSheet() {
   const timeIdeal = idealRoute ? Math.round(idealRoute.durationSeconds / 60) : 29;
   const timeDiff = safeRoute && idealRoute ? Math.round((safeRoute.durationSeconds - idealRoute.durationSeconds) / 60) : 4;
 
-  const hazardsOnRoute = safeRoute?.hazardLocations ?? [];
-
   if (analysisInProgress && (!safeRoute || routeStage !== 'safe')) {
     const progress = Math.max(15, Math.min(100, analyzingProgress || 25));
 
     if (isLoaderMinimized) {
       return (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[1900] pointer-events-auto select-none">
-          <button
-            type="button"
-            onClick={() => setIsLoaderMinimized(false)}
-            className="flex items-center gap-2.5 rounded-full bg-white/95 backdrop-blur-md border border-slate-200 px-4 py-2.5 shadow-lg shadow-slate-900/10 hover:bg-slate-50 transition-all active:scale-95 text-xs font-bold text-slate-800"
-          >
-            <svg className="h-3.5 w-3.5 animate-spin text-slate-800" viewBox="0 0 24 24" fill="none">
-              <circle className="opacity-20" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
-              <path className="opacity-90" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-            </svg>
-            <span>Analyzing Route · {progress}%</span>
-            <ChevronDown className="h-3.5 w-3.5 text-slate-400 rotate-180" />
-          </button>
-        </div>
+        <>
+          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[1900] pointer-events-auto select-none">
+            <button
+              type="button"
+              onClick={() => setIsLoaderMinimized(false)}
+              className="flex items-center gap-2.5 rounded-full bg-white/95 backdrop-blur-md border border-slate-200 px-4 py-2.5 shadow-lg shadow-slate-900/10 hover:bg-slate-50 transition-all active:scale-95 text-xs font-bold text-slate-800"
+            >
+              <svg className="h-3.5 w-3.5 animate-spin text-slate-800" viewBox="0 0 24 24" fill="none">
+                <circle className="opacity-20" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
+                <path className="opacity-90" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+              </svg>
+              <span>Analyzing Route · {progress}%</span>
+              <ChevronDown className="h-3.5 w-3.5 text-slate-400 rotate-180" />
+            </button>
+          </div>
+          <ExitConfirmModal
+            isOpen={showExitModal}
+            title="Cancel Route Search?"
+            description="Do you want to stop calculating routes and return to the map?"
+            onConfirm={() => {
+              setShowExitModal(false);
+              clearNavigation();
+              setAppMode('home');
+            }}
+            onCancel={() => setShowExitModal(false)}
+          />
+        </>
       );
     }
 
     return (
-      <BottomSheet
-        isOpen
-        onClose={() => { clearNavigation(); setAppMode('home'); }}
-        showHandle
-        showBackdrop={false}
-        onSnapDown={() => setIsLoaderMinimized(true)}
-        className="max-h-[220px]"
-      >
-        <div className="space-y-3 pb-1 select-none">
-          {/* Header */}
-          <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-            <div className="min-w-0 pr-2">
-              <h2 className="text-base font-bold text-slate-900 tracking-tight truncate leading-tight">
-                {destination?.name?.split(',')[0] ?? 'Planning Route'}
-              </h2>
-              <p className="text-[11px] text-slate-500 font-medium">Evaluating Safe Flood Corridor</p>
+      <>
+        <BottomSheet
+          isOpen
+          onClose={() => setIsLoaderMinimized(true)}
+          showHandle
+          showBackdrop={false}
+          onSnapDown={() => setIsLoaderMinimized(true)}
+          className="max-h-[220px]"
+        >
+          <div className="space-y-3 pb-1 select-none">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+              <div className="min-w-0 pr-2">
+                <h2 className="text-base font-bold text-slate-900 tracking-tight truncate leading-tight">
+                  {destination?.name?.split(',')[0] ?? 'Planning Route'}
+                </h2>
+                <p className="text-[11px] text-slate-500 font-medium">Evaluating Safe Flood Corridor</p>
+              </div>
+              <div className="flex items-center gap-1.5 flex-shrink-0">
+                <span className="font-mono text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md">
+                  {progress}%
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setIsLoaderMinimized(true)}
+                  title="Minimize loader"
+                  className="flex h-6 w-6 items-center justify-center rounded-md text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition"
+                >
+                  <ChevronDown className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            </div>
+
+            <div className="rounded-xl bg-slate-50 border border-slate-200/80 p-3 space-y-2.5">
+              <div className="flex items-center gap-2.5">
+                <svg className="h-4 w-4 animate-spin text-slate-800 flex-shrink-0" viewBox="0 0 24 24" fill="none">
+                  <circle className="opacity-20" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
+                  <path className="opacity-90" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+                <p className="text-xs font-bold text-slate-900 leading-tight truncate">
+                  {analyzingText || (routeStage === 'ideal' ? 'Scanning street elevation & drain distances…' : 'Optimising safer bypass corridor…')}
+                </p>
+              </div>
+
+              <div className="h-1.5 w-full rounded-full bg-slate-200/80 overflow-hidden">
+                <div
+                  className="h-full bg-slate-800 transition-all duration-300"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+            </div>
+          </div>
+        </BottomSheet>
+        <ExitConfirmModal
+          isOpen={showExitModal}
+          title="Cancel Route Search?"
+          description="Do you want to stop calculating routes and return to the map?"
+          onConfirm={() => {
+            setShowExitModal(false);
+            clearNavigation();
+            setAppMode('home');
+          }}
+          onCancel={() => setShowExitModal(false)}
+        />
+      </>
+    );
+  }
+
+  if (isSheetMinimized && routeStage === 'safe' && safeRoute) {
+    return (
+      <>
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[1800] w-[94%] max-w-sm pointer-events-auto select-none fade-in">
+          <div className="flex items-center justify-between rounded-2xl bg-white/95 backdrop-blur-md border border-slate-200/90 px-3.5 py-2.5 shadow-lg shadow-slate-900/10">
+            <div className="flex items-center gap-2.5 min-w-0 pr-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-100 text-slate-800 border border-slate-200/80 flex-shrink-0">
+                <ShieldCheck className="h-4 w-4" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-xs font-bold text-slate-900 truncate leading-tight">
+                  {destination?.name?.split(',')[0] ?? 'Safe Route'}
+                </p>
+                <p className="text-[11px] text-slate-500 font-medium">
+                  {timeSafe} min · {distSafe} km · Safest Corridor
+                </p>
+              </div>
             </div>
             <div className="flex items-center gap-1.5 flex-shrink-0">
-              <span className="font-mono text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md">
-                {progress}%
-              </span>
               <button
                 type="button"
-                onClick={() => setIsLoaderMinimized(true)}
-                title="Minimize loader"
-                className="flex h-6 w-6 items-center justify-center rounded-md text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition"
+                onClick={() => setIsSheetMinimized(false)}
+                className="rounded-xl bg-slate-900 px-3 py-1.5 text-xs font-bold text-white hover:bg-black active:scale-95 transition"
               >
-                <ChevronDown className="h-3.5 w-3.5" />
+                View Route
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowExitModal(true)}
+                className="flex h-7 w-7 items-center justify-center rounded-xl text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition"
+                title="End route"
+              >
+                <X className="h-3.5 w-3.5" />
               </button>
             </div>
           </div>
-
-          {/* Progress Box */}
-          <div className="rounded-xl bg-slate-50 border border-slate-200/80 p-3 space-y-2.5">
-            <div className="flex items-center gap-2.5">
-              <svg className="h-4 w-4 animate-spin text-slate-800 flex-shrink-0" viewBox="0 0 24 24" fill="none">
-                <circle className="opacity-20" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
-                <path className="opacity-90" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-              </svg>
-              <p className="text-xs font-bold text-slate-900 leading-tight truncate">
-                {analyzingText || (routeStage === 'ideal' ? 'Scanning street elevation & drain distances…' : 'Optimising safer bypass corridor…')}
-              </p>
-            </div>
-
-            {/* Progress bar */}
-            <div className="h-1.5 w-full rounded-full bg-slate-200/80 overflow-hidden">
-              <div
-                className="h-full bg-slate-800 transition-all duration-300"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-          </div>
         </div>
-      </BottomSheet>
+        <ExitConfirmModal
+          isOpen={showExitModal}
+          title="End Route Guidance?"
+          description="This will clear your calculated route and return to map search."
+          onConfirm={() => {
+            setShowExitModal(false);
+            setIsSheetMinimized(false);
+            clearNavigation();
+            setAppMode('home');
+          }}
+          onCancel={() => setShowExitModal(false)}
+        />
+      </>
     );
   }
 
   return (
-    <BottomSheet
-      isOpen
-      onClose={() => { clearNavigation(); setAppMode('home'); }}
-      showHandle
-      showBackdrop={false}
-      onSnapDown={() => {
-        if (snap === 'full') setSnap('mid');
-        else if (snap === 'mid') setSnap('peek');
-        else { clearNavigation(); setAppMode('home'); }
-      }}
-      className={
-        snap === 'peek' ? 'max-h-[340px]' : snap === 'mid' ? 'max-h-[580px]' : 'max-h-[90dvh]'
-      }
-    >
-      {routeStage === 'safe' && safeRoute && idealRoute && (
+    <>
+      <BottomSheet
+        isOpen
+        onClose={() => setIsSheetMinimized(true)}
+        showHandle
+        showBackdrop={false}
+        onSnapDown={() => {
+          if (snap === 'full') setSnap('mid');
+          else if (snap === 'mid') setSnap('peek');
+          else setIsSheetMinimized(true);
+        }}
+        className={
+          snap === 'peek' ? 'max-h-[340px]' : snap === 'mid' ? 'max-h-[580px]' : 'max-h-[90dvh]'
+        }
+      >
         <div className="space-y-4">
           {/* Header Title & Segmented Snap Selector Bar */}
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
@@ -231,37 +271,48 @@ export function RouteBottomSheet() {
               <p className="text-xs text-slate-500 font-medium">Safe Corridor Analysis</p>
             </div>
 
-            {/* Segmented Pills */}
-            <div className="flex items-center gap-1 rounded-xl bg-slate-100 p-1 border border-slate-200/60 flex-shrink-0">
+            <div className="flex items-center gap-1.5 flex-shrink-0">
+              {/* Segmented Pills */}
+              <div className="flex items-center gap-1 rounded-xl bg-slate-100 p-1 border border-slate-200/60">
+                <button
+                  type="button"
+                  onClick={() => setSnap('peek')}
+                  className={[
+                    'px-3 py-1 text-xs font-semibold rounded-lg transition-all duration-150',
+                    snap === 'peek' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-800',
+                  ].join(' ')}
+                >
+                  Summary
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSnap('mid')}
+                  className={[
+                    'px-3 py-1 text-xs font-semibold rounded-lg transition-all duration-150',
+                    snap === 'mid' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-800',
+                  ].join(' ')}
+                >
+                  Routes
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSnap('full')}
+                  className={[
+                    'px-3 py-1 text-xs font-semibold rounded-lg transition-all duration-150',
+                    snap === 'full' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-800',
+                  ].join(' ')}
+                >
+                  Intelligence
+                </button>
+              </div>
+
               <button
                 type="button"
-                onClick={() => setSnap('peek')}
-                className={[
-                  'px-3 py-1 text-xs font-semibold rounded-lg transition-all duration-150',
-                  snap === 'peek' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-800',
-                ].join(' ')}
+                onClick={() => setShowExitModal(true)}
+                title="Close and exit route"
+                className="flex h-7 w-7 items-center justify-center rounded-xl text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition"
               >
-                Summary
-              </button>
-              <button
-                type="button"
-                onClick={() => setSnap('mid')}
-                className={[
-                  'px-3 py-1 text-xs font-semibold rounded-lg transition-all duration-150',
-                  snap === 'mid' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-800',
-                ].join(' ')}
-              >
-                Routes
-              </button>
-              <button
-                type="button"
-                onClick={() => setSnap('full')}
-                className={[
-                  'px-3 py-1 text-xs font-semibold rounded-lg transition-all duration-150',
-                  snap === 'full' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-800',
-                ].join(' ')}
-              >
-                Intelligence
+                <X className="h-3.5 w-3.5" />
               </button>
             </div>
           </div>
@@ -501,7 +552,19 @@ export function RouteBottomSheet() {
             </div>
           )}
         </div>
-      )}
-    </BottomSheet>
+      </BottomSheet>
+      <ExitConfirmModal
+        isOpen={showExitModal}
+        title="End Route Guidance?"
+        description="This will clear your calculated route and return to map search."
+        onConfirm={() => {
+          setShowExitModal(false);
+          setIsSheetMinimized(false);
+          clearNavigation();
+          setAppMode('home');
+        }}
+        onCancel={() => setShowExitModal(false)}
+      />
+    </>
   );
 }

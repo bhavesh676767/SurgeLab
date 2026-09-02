@@ -3,6 +3,7 @@ import { useMapStore } from '@/store/mapStore';
 import { useNavigationEngine } from '@/hooks/useNavigationEngine';
 import { navigationEngine } from '@/services/navigationEngine';
 import { useEffect, useState } from 'react';
+import { ExitConfirmModal } from './ExitConfirmModal';
 import type { NavigationState } from '@/services/navigationEngine';
 
 function getManeuverIcon(instruction: string) {
@@ -29,6 +30,7 @@ export function NavigationHUD() {
   const setAppMode = useMapStore((s) => s.setAppMode);
 
   const [navState, setNavState] = useState<NavigationState | null>(null);
+  const [showExitModal, setShowExitModal] = useState(false);
 
   // Mount the navigation engine
   useNavigationEngine();
@@ -69,7 +71,7 @@ export function NavigationHUD() {
         <div className="flex items-center justify-between gap-3 px-4 py-3 max-w-lg mx-auto">
           <button
             type="button"
-            onClick={() => { clearNavigation(); setAppMode('home'); }}
+            onClick={() => setShowExitModal(true)}
             aria-label="Exit navigation"
             className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900 transition-all active:scale-90 flex-shrink-0"
           >
@@ -145,6 +147,18 @@ export function NavigationHUD() {
           </div>
         </div>
       </div>
+
+      <ExitConfirmModal
+        isOpen={showExitModal}
+        title="End Active Navigation?"
+        description="Are you sure you want to stop turn-by-turn guidance and return to the map?"
+        onConfirm={() => {
+          setShowExitModal(false);
+          clearNavigation();
+          setAppMode('home');
+        }}
+        onCancel={() => setShowExitModal(false)}
+      />
     </>
   );
 }
