@@ -318,42 +318,55 @@ export function RouteBottomSheet() {
                 <button
                   type="button"
                   onClick={() => setActiveRouteTab('safe')}
-                  className={['rounded-3xl border p-4 text-left transition-all relative', activeRouteTab === 'safe' ? 'border-sky-500 ring-2 ring-sky-500/20 bg-sky-50/60 shadow-card' : 'border-slate-200/90 bg-white hover:border-sky-300 hover:shadow-xs'].join(' ')}
+                  className={[
+                    'rounded-2xl border p-3.5 text-left transition-all relative',
+                    activeRouteTab === 'safe'
+                      ? 'border-slate-900 ring-1 ring-slate-900 bg-slate-50/70 shadow-sm'
+                      : 'border-slate-200/90 bg-white hover:border-slate-300 shadow-2xs',
+                  ].join(' ')}
                 >
                   <div className="flex items-center justify-between mb-1.5">
-                    <div className="flex items-center gap-1 text-xs font-bold text-slate-800">
-                      <ShieldCheck className="h-3.5 w-3.5 text-sky-500" />
+                    <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900">
+                      <ShieldCheck className="h-3.5 w-3.5 text-slate-700" />
                       <span>Safer</span>
                     </div>
-                    <span className="text-[9px] font-bold text-emerald-700 bg-emerald-100/80 rounded-full px-1.5 py-0.5">★ Safest</span>
+                    <span className="text-[10px] font-bold text-slate-700 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded-md">
+                      Safest
+                    </span>
                   </div>
-                  <p className="text-2xl font-black text-slate-900 leading-none mb-1">
-                    {timeSafe}<span className="text-xs font-bold text-slate-500"> min</span>
+                  <p className="text-2xl font-extrabold text-slate-900 leading-none mb-1">
+                    {timeSafe}<span className="text-xs font-semibold text-slate-500"> min</span>
                   </p>
-                  <p className="text-xs font-medium text-slate-400 mb-2">{distSafe} km</p>
-                  <RiskBadge level={riskLevelFromPct(safeRoute.maxRiskPct)} size="sm" />
+                  <p className="text-xs font-medium text-slate-400 font-mono mb-2">{distSafe} km</p>
+                  <span className="inline-block text-[10px] font-semibold text-slate-700 bg-slate-100 border border-slate-200/80 px-2 py-0.5 rounded-md">
+                    Lower Risk
+                  </span>
                 </button>
 
                 {/* Fastest Route */}
                 <button
                   type="button"
                   onClick={() => setActiveRouteTab('ideal')}
-                  className={['rounded-3xl border p-4 text-left transition-all', activeRouteTab === 'ideal' ? 'border-amber-400 ring-2 ring-amber-400/20 bg-amber-50/50 shadow-card' : 'border-slate-200/90 bg-white hover:border-amber-200 hover:shadow-xs'].join(' ')}
+                  className={[
+                    'rounded-2xl border p-3.5 text-left transition-all relative',
+                    activeRouteTab === 'ideal'
+                      ? 'border-slate-900 ring-1 ring-slate-900 bg-slate-50/70 shadow-sm'
+                      : 'border-slate-200/90 bg-white hover:border-slate-300 shadow-2xs',
+                  ].join(' ')}
                 >
-                  <div className="flex items-center gap-1 mb-1.5 text-xs font-bold text-slate-800">
-                    <Zap className="h-3.5 w-3.5 text-amber-500" />
-                    <span>Fastest</span>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900">
+                      <Zap className="h-3.5 w-3.5 text-slate-700" />
+                      <span>Fastest</span>
+                    </div>
                   </div>
-                  <p className="text-2xl font-black text-slate-900 leading-none mb-1">
-                    {timeIdeal}<span className="text-xs font-bold text-slate-500"> min</span>
+                  <p className="text-2xl font-extrabold text-slate-900 leading-none mb-1">
+                    {timeIdeal}<span className="text-xs font-semibold text-slate-500"> min</span>
                   </p>
-                  <p className="text-xs font-medium text-slate-400 mb-2">{distIdeal} km</p>
-                  <RiskBadge level={riskLevelFromPct(idealRoute.maxRiskPct)} size="sm" />
-                  {idealRoute.maxDepthCm > 30 && (
-                    <p className="mt-1.5 text-[10px] text-rose-600 font-bold flex items-center gap-0.5">
-                      <AlertTriangle className="h-3 w-3" /> Flood risk
-                    </p>
-                  )}
+                  <p className="text-xs font-medium text-slate-400 font-mono mb-2">{distIdeal} km</p>
+                  <span className="inline-block text-[10px] font-semibold text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-md">
+                    {idealRoute.maxDepthCm > 30 ? `~${idealRoute.maxDepthCm}cm Water` : 'Severe risk'}
+                  </span>
                 </button>
               </div>
 
