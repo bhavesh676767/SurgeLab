@@ -252,60 +252,75 @@ export function NavigationPanel() {
     );
   }
 
-  // ─── ROUTES MODE: sleek, minimal floating corridor capsule ───────────────
+  // ─── ROUTES MODE: desktop navigation search / waypoint card ─────────────
   if (appMode === 'routes') {
     return (
       <div className="relative w-full animate-fade-in select-none">
-        <div className="flex items-center justify-between gap-3 rounded-full bg-white/95 backdrop-blur-md px-3.5 shadow-float border border-slate-200/90 h-[52px]">
-          {/* Back button to edit locations */}
-          <button
-            type="button"
-            onClick={() => {
-              setAppMode('searching');
-              setActiveInput('destination');
-            }}
-            aria-label="Edit route locations"
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900 transition active:scale-90 flex-shrink-0"
-            title="Edit route"
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </button>
-
-          {/* Corridor summary: Origin → Destination */}
-          <button
-            type="button"
-            onClick={() => {
-              setAppMode('searching');
-              setActiveInput('destination');
-            }}
-            className="flex-1 min-w-0 flex items-center gap-2 text-left"
-            title="Tap to change route"
-          >
-            <div className="flex items-center gap-1.5 min-w-0 flex-1">
-              <span className="h-2 w-2 rounded-full bg-emerald-500 flex-shrink-0" />
-              <span className="text-xs font-bold text-slate-800 truncate">
-                {origin?.name?.replace(/Your location \((.*)\)/, '$1') ?? 'Start'}
-              </span>
-              <span className="text-slate-300 font-light">→</span>
-              <span className="h-2 w-2 rounded-full bg-rose-500 flex-shrink-0" />
-              <span className="text-xs font-bold text-slate-800 truncate">
-                {destination?.name ?? 'Destination'}
-              </span>
+        <div className="rounded-2xl bg-white/95 backdrop-blur-md shadow-float border border-slate-200/90 p-3 space-y-2">
+          {/* Origin Row */}
+          <div className="flex items-center justify-between gap-2">
+            <div
+              onClick={() => {
+                setAppMode('searching');
+                setActiveInput('origin');
+              }}
+              className="flex-1 min-w-0 flex items-center gap-2.5 px-2.5 py-1.5 rounded-xl hover:bg-slate-50 cursor-pointer transition"
+            >
+              <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 ring-4 ring-emerald-100 flex-shrink-0" />
+              <div className="min-w-0 flex-1">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 leading-none">Origin</p>
+                <p className="text-xs font-bold text-slate-900 truncate mt-0.5">
+                  {origin?.name?.replace(/Your location \((.*)\)/, '$1') ?? 'Start Location'}
+                </p>
+              </div>
             </div>
-          </button>
 
-          {/* Close/Reset Button */}
-          <button
-            type="button"
-            onClick={() => {
-              clearNavigation();
-              setAppMode('home');
-            }}
-            aria-label="Exit route"
-            className="flex h-8 w-8 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition active:scale-90 flex-shrink-0"
-          >
-            <X className="h-4 w-4" />
-          </button>
+            {/* Swap Button */}
+            <button
+              type="button"
+              onClick={swapOriginDestination}
+              aria-label="Swap origin and destination"
+              className="flex h-7 w-7 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 hover:bg-slate-50 hover:text-slate-900 transition active:scale-90"
+              title="Swap Route"
+            >
+              <ArrowUpDown className="h-3.5 w-3.5" />
+            </button>
+          </div>
+
+          <div className="h-px bg-slate-100 mx-2" />
+
+          {/* Destination Row */}
+          <div className="flex items-center justify-between gap-2">
+            <div
+              onClick={() => {
+                setAppMode('searching');
+                setActiveInput('destination');
+              }}
+              className="flex-1 min-w-0 flex items-center gap-2.5 px-2.5 py-1.5 rounded-xl hover:bg-slate-50 cursor-pointer transition"
+            >
+              <span className="h-2.5 w-2.5 rounded-full bg-rose-500 ring-4 ring-rose-100 flex-shrink-0" />
+              <div className="min-w-0 flex-1">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 leading-none">Destination</p>
+                <p className="text-xs font-bold text-slate-900 truncate mt-0.5">
+                  {destination?.name ?? 'Where to?'}
+                </p>
+              </div>
+            </div>
+
+            {/* Clear / Exit Route Button */}
+            <button
+              type="button"
+              onClick={() => {
+                clearNavigation();
+                setAppMode('home');
+              }}
+              aria-label="Exit route"
+              className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition active:scale-90"
+              title="Clear Route"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
         </div>
       </div>
     );

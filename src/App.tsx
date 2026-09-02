@@ -20,6 +20,8 @@ import { useMapStore } from "@/store/mapStore";
 
 import { SmartAnalysisDrawer } from "@/components/ui/SmartAnalysisDrawer";
 import { ElevationProfileModal } from "@/components/ui/ElevationProfile";
+import { DesktopRoutePanel } from "@/components/ui/DesktopRoutePanel";
+import { WaterRiskLayerControl } from "@/components/ui/WaterRiskLayerControl";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -54,23 +56,29 @@ export default function App() {
     <>
       {showSplash && <SplashScreen />}
 
-      <div className="relative h-[100dvh] w-screen overflow-hidden bg-slate-100 font-sans">
-        {/* Full-screen map */}
+      <div className="relative h-[100dvh] w-screen overflow-hidden bg-slate-100 font-sans select-none">
+        {/* Full-screen 100% viewport map */}
         <MapContainer />
 
-        {/* Top bar container */}
+        {/* Left Desktop Floating Stack (Top Search / Route Bar + Left Route Panel) */}
         {!isNavigating && (
-          <div className="pointer-events-none absolute inset-x-0 top-0 z-[1100] p-3 sm:p-4">
-            <div className="pointer-events-auto w-full max-w-md mx-auto">
+          <div className="pointer-events-none absolute left-3 top-3 z-[1100] sm:left-6 sm:top-6 flex flex-col gap-3 max-w-[calc(100vw-24px)] w-full sm:w-[390px] lg:w-[410px]">
+            {/* Top Search / Route Bar */}
+            <div className="pointer-events-auto w-full">
               <NavigationPanel />
+            </div>
+
+            {/* Desktop Left Route Information Panel (Rendered on >=1024px screens) */}
+            <div className="pointer-events-auto hidden lg:block w-full">
+              <DesktopRoutePanel />
             </div>
           </div>
         )}
 
-        {/* Risk Legend — bottom-left, single Water risk chip that expands to full legend */}
+        {/* Lower-left: Water-Risk Layer Control & Depth Guide */}
         {!isNavigating && (
-          <div className="pointer-events-none absolute bottom-6 left-4 z-[1000] sm:bottom-8 sm:left-6">
-            <RiskLegend />
+          <div className="pointer-events-none absolute bottom-6 left-4 z-[1000] sm:bottom-6 sm:left-6">
+            <WaterRiskLayerControl />
           </div>
         )}
 

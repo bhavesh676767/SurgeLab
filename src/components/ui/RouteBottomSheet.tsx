@@ -94,7 +94,7 @@ export function RouteBottomSheet() {
 
     if (isLoaderMinimized) {
       return (
-        <>
+        <div className="lg:hidden">
           <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[1900] pointer-events-auto select-none">
             <button
               type="button"
@@ -120,12 +120,12 @@ export function RouteBottomSheet() {
             }}
             onCancel={() => setShowExitModal(false)}
           />
-        </>
+        </div>
       );
     }
 
     return (
-      <>
+      <div className="lg:hidden">
         <BottomSheet
           isOpen
           onClose={() => setIsLoaderMinimized(true)}
@@ -188,13 +188,13 @@ export function RouteBottomSheet() {
           }}
           onCancel={() => setShowExitModal(false)}
         />
-      </>
+      </div>
     );
   }
 
   if (isSheetMinimized && routeStage === 'safe' && safeRoute) {
     return (
-      <>
+      <div className="lg:hidden">
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[1800] w-[94%] max-w-sm pointer-events-auto select-none fade-in">
           <div className="flex items-center justify-between rounded-2xl bg-white/95 backdrop-blur-md border border-slate-200/90 px-3.5 py-2.5 shadow-lg shadow-slate-900/10">
             <div className="flex items-center gap-2.5 min-w-0 pr-2">
@@ -241,12 +241,12 @@ export function RouteBottomSheet() {
           }}
           onCancel={() => setShowExitModal(false)}
         />
-      </>
+      </div>
     );
   }
 
   return (
-    <>
+    <div className="lg:hidden">
       <BottomSheet
         isOpen
         onClose={() => setIsSheetMinimized(true)}
@@ -565,6 +565,6 @@ export function RouteBottomSheet() {
         }}
         onCancel={() => setShowExitModal(false)}
       />
-    </>
+    </div>
   );
 }
