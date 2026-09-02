@@ -1,4 +1,4 @@
-﻿/**
+/**
  * useNavigationEngine
  *
  * React hook that connects the NavigationEngine to the mapStore.
@@ -18,7 +18,6 @@ export function useNavigationEngine() {
   const idealRoute = useMapStore((s) => s.idealRoute);
   const activeRouteTab = useMapStore((s) => s.activeRouteTab);
   const simulationMode = useMapStore((s) => s.simulationMode);
-  const userLocation = useMapStore((s) => s.userLocation);
 
   const setNavigationPosition = useMapStore((s) => s.setNavigationPosition);
   const setCurrentStepIndex = useMapStore((s) => s.setCurrentStepIndex);
@@ -40,14 +39,8 @@ export function useNavigationEngine() {
 
     dismissedRerouteRef.current = false;
 
-    // Check if user location is physically near route start or in simulation
-    const firstCoord = activeRoute.coordinates[0];
-    const isFarFromStart =
-      !userLocation ||
-      Math.hypot(userLocation.lat - firstCoord[0], userLocation.lng - firstCoord[1]) > 0.05; // > ~5km
-
-    // Use simulation if explicitly enabled or on desktop far away from Gurugram route
-    if (simulationMode || isFarFromStart) {
+    // Only use simulation when explicitly enabled in Settings
+    if (simulationMode) {
       const sim = new SimulationProvider();
       sim.setRoute(activeRoute.coordinates);
       sim.setSpeed(45);
