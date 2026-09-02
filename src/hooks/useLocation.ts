@@ -3,11 +3,12 @@ import type { LatLng } from "@/types/dataset";
 
 interface UseLocationOptions {
   onLocation?: (location: LatLng, accuracy: number) => void;
+  onError?: (error: string) => void;
   enableHighAccuracy?: boolean;
 }
 
 export function useLocation(options: UseLocationOptions = {}) {
-  const { onLocation, enableHighAccuracy = true } = options;
+  const { onLocation, onError, enableHighAccuracy = true } = options;
   const [location, setLocation] = useState<LatLng | null>(null);
   const [accuracy, setAccuracy] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -24,7 +25,9 @@ export function useLocation(options: UseLocationOptions = {}) {
 
   const requestLocation = useCallback(() => {
     if (!navigator.geolocation) {
-      setError("Geolocation is not supported");
+      const msg = "Geolocation is not supported by your browser";
+      setError(msg);
+      onError?.(msg);
       return;
     }
 
@@ -49,6 +52,7 @@ export function useLocation(options: UseLocationOptions = {}) {
       (err) => {
         setError(err.message);
         setIsTracking(false);
+        onError?.(err.message);
       },
       {
         enableHighAccuracy,
@@ -56,7 +60,7 @@ export function useLocation(options: UseLocationOptions = {}) {
         timeout: 15000,
       },
     );
-  }, [enableHighAccuracy, onLocation]);
+  }, [enableHighAccuracy, onLocation, onError]);
 
   useEffect(() => {
     return () => stopTracking();
@@ -67,7 +71,9 @@ export function useLocation(options: UseLocationOptions = {}) {
     accuracy,
     error,
     isTracking,
+    isLocating: isTracking,
     requestLocation,
     stopTracking,
   };
 }
+

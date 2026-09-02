@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ShieldCheck, Scale, Zap, ChevronDown, ChevronUp, Activity, Droplets, Mountain, CloudRain, Globe } from 'lucide-react';
+import { ShieldCheck, Scale, Zap, ChevronDown, ChevronUp, Activity, Droplets, Mountain, CloudRain, Map, GitBranch } from 'lucide-react';
 import { useMapStore } from '@/store/mapStore';
 import type { NavSettings } from '@/store/mapStore';
 import { BottomSheet } from './BottomSheet';
@@ -12,7 +12,7 @@ function ToggleSwitch({ checked, onChange, label }: { checked: boolean; onChange
       aria-checked={checked}
       aria-label={label}
       onClick={() => onChange(!checked)}
-      className={['relative inline-flex h-6 w-11 flex-shrink-0 items-center rounded-full transition-colors duration-200', checked ? 'bg-sky-500' : 'bg-slate-200'].join(' ')}
+      className={['relative inline-flex h-6 w-11 flex-shrink-0 items-center rounded-full transition-colors duration-200', checked ? 'bg-slate-900' : 'bg-slate-200'].join(' ')}
     >
       <span
         className={['inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform duration-200', checked ? 'translate-x-6' : 'translate-x-1'].join(' ')}
@@ -45,10 +45,12 @@ export function SettingsPanel() {
   const stormIntensity = useMapStore((s) => s.stormIntensity);
   const weather = useMapStore((s) => s.weather);
   const basemapMode = useMapStore((s) => s.basemapMode);
+  const showTerrainPaint = useMapStore((s) => s.showTerrainPaint);
   const toggleSatellite = useMapStore((s) => s.toggleSatellite);
   const setSettingsOpen = useMapStore((s) => s.setSettingsOpen);
   const setNavSettings = useMapStore((s) => s.setNavSettings);
   const setSimulationMode = useMapStore((s) => s.setSimulationMode);
+  const setShowTerrainPaint = useMapStore((s) => s.setShowTerrainPaint);
 
   const [devTapCount, setDevTapCount] = useState(0);
   const [showDev, setShowDev] = useState(false);
@@ -99,6 +101,16 @@ export function SettingsPanel() {
           label="Satellite view"
           checked={basemapMode === 'satellite'}
           onChange={() => toggleSatellite()}
+        />
+      </SettingRow>
+      <SettingRow
+        label="Risk street lines"
+        description="Show colour-coded street-level flood-risk overlay on the map"
+      >
+        <ToggleSwitch
+          label="Risk street lines"
+          checked={showTerrainPaint}
+          onChange={(v) => setShowTerrainPaint(v)}
         />
       </SettingRow>
 

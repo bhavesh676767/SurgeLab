@@ -31,6 +31,7 @@ export interface LayerVisibility {
   rainfall: boolean;
   terrain: boolean;
   traffic: boolean;
+  riskStreetLines: boolean;
 }
 
 export interface NavSettings {
@@ -112,6 +113,7 @@ interface MapStore {
   navigationPosition: NavigationPosition | null;
   isRerouting: boolean;
   showHazardCallout: boolean;
+  showRerouteAlert: boolean;
   isSmartAnalysisOpen: boolean;
   sheetSnap: 'peek' | 'mid' | 'full';
   isElevationModalOpen: boolean;
@@ -211,6 +213,7 @@ export const useMapStore = create<MapStore>()(
         rainfall: false,
         terrain: false,
         traffic: false,
+        riskStreetLines: true,
       },
       floodedRoadInfo: null,
 
