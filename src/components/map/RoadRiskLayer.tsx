@@ -113,8 +113,11 @@ export function RoadRiskLayer() {
 
     if (!showTerrainPaint || roadsRef.current.length === 0) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      canvas.style.display = "none";
       return;
     }
+
+    canvas.style.display = "block";
 
     const zoom = map.getZoom();
     const allowed = highwaysForZoom(zoom);
@@ -213,7 +216,7 @@ export function RoadRiskLayer() {
 
   useEffect(() => {
     scheduleRedraw();
-  }, [showTerrainPaint, scheduleRedraw]);
+  }, [showTerrainPaint, paintedRoads, scheduleRedraw]);
 
   // Check on move if current viewport exceeds buffered canvas area
   const onMapMove = useCallback(() => {

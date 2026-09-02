@@ -11,8 +11,11 @@ function ToggleSwitch({ checked, onChange, label }: { checked: boolean; onChange
       role="switch"
       aria-checked={checked}
       aria-label={label}
-      onClick={() => onChange(!checked)}
-      className={['relative inline-flex h-6 w-11 flex-shrink-0 items-center rounded-full transition-colors duration-200', checked ? 'bg-slate-900' : 'bg-slate-200'].join(' ')}
+      onClick={(e) => {
+        e.stopPropagation();
+        onChange(!checked);
+      }}
+      className={['relative inline-flex h-6 w-11 flex-shrink-0 items-center rounded-full transition-colors duration-200 cursor-pointer', checked ? 'bg-slate-900' : 'bg-slate-200'].join(' ')}
     >
       <span
         className={['inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform duration-200', checked ? 'translate-x-6' : 'translate-x-1'].join(' ')}
@@ -26,9 +29,12 @@ function SectionHeader({ children }: { children: React.ReactNode }) {
   return <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2 mt-5 first:mt-0">{children}</p>;
 }
 
-function SettingRow({ label, description, children }: { label: string; description?: string; children: React.ReactNode }) {
+function SettingRow({ label, description, onClick, children }: { label: string; description?: string; onClick?: () => void; children: React.ReactNode }) {
   return (
-    <div className="flex items-center justify-between gap-3 py-3 border-b border-slate-100 last:border-0">
+    <div
+      onClick={onClick}
+      className={['flex items-center justify-between gap-3 py-3 border-b border-slate-100 last:border-0 select-none', onClick ? 'cursor-pointer hover:bg-slate-50/70 -mx-2 px-2 rounded-xl transition' : ''].join(' ')}
+    >
       <div className="flex-1">
         <p className="text-sm font-medium text-slate-900">{label}</p>
         {description && <p className="text-xs text-slate-400 mt-0.5">{description}</p>}
@@ -96,7 +102,11 @@ export function SettingsPanel() {
 
       {/* Map appearance */}
       <SectionHeader>Map style</SectionHeader>
-      <SettingRow label="Satellite view" description="Switch between standard light map and high-resolution Esri satellite imagery">
+      <SettingRow
+        label="Satellite view"
+        description="Switch between standard light map and high-resolution Esri satellite imagery"
+        onClick={() => toggleSatellite()}
+      >
         <ToggleSwitch
           label="Satellite view"
           checked={basemapMode === 'satellite'}
@@ -106,6 +116,7 @@ export function SettingsPanel() {
       <SettingRow
         label="Risk street lines"
         description="Show colour-coded street-level flood-risk overlay on the map"
+        onClick={() => setShowTerrainPaint(!showTerrainPaint)}
       >
         <ToggleSwitch
           label="Risk street lines"
@@ -116,13 +127,24 @@ export function SettingsPanel() {
 
       {/* Risk avoidance */}
       <SectionHeader>Risk avoidance</SectionHeader>
-      <SettingRow label="Avoid high-risk roads" description="Route around roads with estimated severe flooding">
+      <SettingRow
+        label="Avoid high-risk roads"
+        description="Route around roads with estimated severe flooding"
+        onClick={() => update({ avoidHighRisk: !navSettings.avoidHighRisk })}
+      >
         <ToggleSwitch label="Avoid high-risk roads" checked={navSettings.avoidHighRisk} onChange={(v) => update({ avoidHighRisk: v })} />
       </SettingRow>
-      <SettingRow label="Avoid flooded underpasses" description="Skip underpasses with high estimated water depth">
+      <SettingRow
+        label="Avoid flooded underpasses"
+        description="Skip underpasses with high estimated water depth"
+        onClick={() => update({ avoidUnderpasses: !navSettings.avoidUnderpasses })}
+      >
         <ToggleSwitch label="Avoid flooded underpasses" checked={navSettings.avoidUnderpasses} onChange={(v) => update({ avoidUnderpasses: v })} />
       </SettingRow>
-      <SettingRow label="Avoid low-elevation roads">
+      <SettingRow
+        label="Avoid low-elevation roads"
+        onClick={() => update({ avoidLowElevation: !navSettings.avoidLowElevation })}
+      >
         <ToggleSwitch label="Avoid low-elevation roads" checked={navSettings.avoidLowElevation} onChange={(v) => update({ avoidLowElevation: v })} />
       </SettingRow>
 
