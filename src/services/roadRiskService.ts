@@ -172,6 +172,90 @@ export interface PaintedRoadSegment {
   maxLng: number;
 }
 
+/**
+ * 2D Spatial Grid Index for lightning-fast bounding box and radius queries
+ * over thousands of road segments.
+ */
+export class RoadSpatialIndex {
+  private cellSize = 0.015; // ~1.5km grid cells
+  private grid = new Map<string, PaintedRoadSegment[]>();
+  readonly count: number;
+
+  constructor(roads: PaintedRoadSegment[]) {
+    this.count = roads.length;
+    for (const r of roads) {
+      const minX = Math.floor(r.minLng / this.cellSize);
+      const maxX = Math.floor(r.maxLng / this.cellSize);
+      const minY = Math.floor(r.minLat / this.cellSize);
+      const maxY = Math.floor(r.maxLat / this.cellSize);
+
+      for (let y = minY; y <= maxY; y++) {
+        for (let x = minX; x <= maxX; x++) {
+          const key = `${y}:${x}`;
+          let bucket = this.grid.get(key);
+          if (!bucket) {
+            bucket = [];
+            this.grid.set(key, bucket);
+          }
+          bucket.push(r);
+        }
+      }
+    }
+  }
+
+  query(bounds: { getSouth: () => number; getNorth: () => number; getWest: () => number; getEast: () => number }): PaintedRoadSegment[] {
+    const south = bounds.getSouth();
+    const north = bounds.getNorth();
+    const west = bounds.getWest();
+    const east = bounds.getEast();
+
+    const minX = Math.floor(west / this.cellSize);
+    const maxX = Math.floor(east / this.cellSize);
+    const minY = Math.floor(south / this.cellSize);
+    const maxY = Math.floor(north / this.cellSize);
+
+    const result = new Set<PaintedRoadSegment>();
+
+    for (let y = minY; y <= maxY; y++) {
+      for (let x = minX; x <= maxX; x++) {
+        const bucket = this.grid.get(`${y}:${x}`);
+        if (!bucket) continue;
+        for (const road of bucket) {
+          if (
+            road.maxLat >= south &&
+            road.minLat <= north &&
+            road.maxLng >= west &&
+            road.minLng <= east
+          ) {
+            result.add(road);
+          }
+        }
+      }
+    }
+
+    return Array.from(result);
+  }
+
+  queryPoint(lat: number, lng: number, pad = 0.003): PaintedRoadSegment[] {
+    const minX = Math.floor((lng - pad) / this.cellSize);
+    const maxX = Math.floor((lng + pad) / this.cellSize);
+    const minY = Math.floor((lat - pad) / this.cellSize);
+    const maxY = Math.floor((lat + pad) / this.cellSize);
+
+    const result = new Set<PaintedRoadSegment>();
+    for (let y = minY; y <= maxY; y++) {
+      for (let x = minX; x <= maxX; x++) {
+        const bucket = this.grid.get(`${y}:${x}`);
+        if (!bucket) continue;
+        for (const road of bucket) {
+          result.add(road);
+        }
+      }
+    }
+    return Array.from(result);
+  }
+}
+
 function bboxFromLatLngs(latlngs: [number, number][]) {
   let minLat = Infinity, maxLat = -Infinity, minLng = Infinity, maxLng = -Infinity;
   for (const [lat, lng] of latlngs) {

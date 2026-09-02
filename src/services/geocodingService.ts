@@ -123,7 +123,23 @@ export function searchLocalIncidents(
   return results;
 }
 
-/** Global place search via OpenStreetMap Nominatim (no API key). */
+export const GURUGRAM_BOUNDS = {
+  minLat: 28.3000,
+  maxLat: 28.5600,
+  minLng: 76.8500,
+  maxLng: 77.1600,
+};
+
+export function isInsideGurugram(lat: number, lng: number): boolean {
+  return (
+    lat >= GURUGRAM_BOUNDS.minLat &&
+    lat <= GURUGRAM_BOUNDS.maxLat &&
+    lng >= GURUGRAM_BOUNDS.minLng &&
+    lng <= GURUGRAM_BOUNDS.maxLng
+  );
+}
+
+/** Global place search restricted strictly to Gurugram region. */
 export async function searchPlaces(
   query: string,
   options: SearchPlacesOptions = {},
@@ -132,11 +148,14 @@ export async function searchPlaces(
   if (trimmed.length < 2) return [];
 
   const limit = options.limit ?? 10;
+  // Restrict to Gurugram bounding box
   const params = new URLSearchParams({
-    q: trimmed,
+    q: `${trimmed} Gurugram`,
     format: "json",
     addressdetails: "1",
     dedupe: "1",
+    viewbox: "76.8500,28.5600,77.1600,28.3000",
+    bounded: "1",
     limit: String(limit),
   });
 
@@ -145,29 +164,36 @@ export async function searchPlaces(
     params.set("lon", String(options.near.lng));
   }
 
-  const res = await fetch(`${NOMINATIM_BASE}/search?${params}`, {
-    headers: nominatimHeaders(),
-  });
+  try {
+    const res = await fetch(`${NOMINATIM_BASE}/search?${params}`, {
+      headers: nominatimHeaders(),
+    });
 
-  if (!res.ok) return [];
+    if (!res.ok) return [];
 
-  const data: NominatimHit[] = await res.json();
-  return data.map(mapNominatimHit);
+    const data: NominatimHit[] = await res.json();
+    return data
+      .map(mapNominatimHit)
+      .filter((p) => isInsideGurugram(p.location.lat, p.location.lng));
+  } catch {
+    return [];
+  }
 }
 
-/** Combined local + global search with deduplication by proximity. */
+/** Combined local + global search with deduplication by proximity strictly inside Gurugram. */
 export async function searchPlacesCombined(
   query: string,
   incidents: FloodIncident[],
   options: SearchPlacesOptions = {},
 ): Promise<PlaceSearchResult[]> {
-  const local = searchLocalIncidents(query, incidents, 4);
+  const local = searchLocalIncidents(query, incidents, 5);
   const remote = await searchPlaces(query, { ...options, limit: 8 });
 
   const merged: PlaceSearchResult[] = [...local];
   const NEAR_DEG = 0.0008;
 
   for (const place of remote) {
+    if (!isInsideGurugram(place.location.lat, place.location.lng)) continue;
     const duplicate = merged.some(
       (p) =>
         Math.abs(p.location.lat - place.location.lat) < NEAR_DEG &&
@@ -176,7 +202,7 @@ export async function searchPlacesCombined(
     if (!duplicate) merged.push(place);
   }
 
-  return merged.slice(0, 12);
+  return merged.slice(0, 10);
 }
 
 export async function geocodeAddress(
@@ -209,3 +235,96 @@ export async function geocodeAddress(
 
   return { lat: Number(hit.lat), lng: Number(hit.lon) };
 }
+
+export async function reverseGeocodeLatLng(
+  lat: number,
+  lng: number,
+): Promise<string> {
+  try {
+    const params = new URLSearchParams({
+      lat: String(lat),
+      lon: String(lng),
+      format: "json",
+      addressdetails: "1",
+    });
+
+    const res = await fetch(`${NOMINATIM_BASE}/reverse?${params}`, {
+      headers: nominatimHeaders(),
+    });
+
+    if (!res.ok) return `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+
+    const data: NominatimHit = await res.json();
+    return primaryName(data) || data.display_name.split(",")[0] || `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+  } catch {
+    return `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+  }
+}
+
+export const GURUGRAM_PRESETS: PlaceSearchResult[] = [
+  {
+    placeId: "preset-cyber-hub",
+    name: "DLF Cyber Hub",
+    formattedAddress: "DLF Cyber City, Sector 24, Gurugram",
+    location: { lat: 28.4952, lng: 77.0891 },
+    category: "Commercial",
+    source: "local",
+  },
+  {
+    placeId: "preset-golf-course-road",
+    name: "Golf Course Road (Sector 54)",
+    formattedAddress: "Sector 54, Golf Course Road, Gurugram",
+    location: { lat: 28.4418, lng: 77.1084 },
+    category: "Corridor",
+    source: "local",
+  },
+  {
+    placeId: "preset-iffco-chowk",
+    name: "IFFCO Chowk",
+    formattedAddress: "Sector 29, NH-48 Junction, Gurugram",
+    location: { lat: 28.47167, lng: 77.07337 },
+    category: "Junction",
+    source: "local",
+  },
+  {
+    placeId: "preset-rajiv-chowk",
+    name: "Rajiv Chowk Junction",
+    formattedAddress: "Sector 33 / NH-48, Gurugram",
+    location: { lat: 28.45951, lng: 77.03139 },
+    category: "Junction",
+    source: "local",
+  },
+  {
+    placeId: "preset-medanta",
+    name: "Medanta - The Medicity",
+    formattedAddress: "Sector 38, Bakhtawar Singh Road, Gurugram",
+    location: { lat: 28.43841, lng: 77.04083 },
+    category: "Hospital",
+    source: "local",
+  },
+  {
+    placeId: "preset-hero-honda-chowk",
+    name: "Hero Honda Chowk",
+    formattedAddress: "Sector 33/34, NH-48, Gurugram",
+    location: { lat: 28.4361, lng: 77.02762 },
+    category: "Hotspot",
+    source: "local",
+  },
+  {
+    placeId: "preset-sector-29",
+    name: "Sector 29 Market",
+    formattedAddress: "Sector 29, City Centre, Gurugram",
+    location: { lat: 28.4682, lng: 77.0628 },
+    category: "Commercial",
+    source: "local",
+  },
+  {
+    placeId: "preset-dwarka-expressway",
+    name: "Dwarka Expressway (Sector 102)",
+    formattedAddress: "Sector 102, Dwarka Expressway, Gurugram",
+    location: { lat: 28.48941, lng: 76.97301 },
+    category: "Highway",
+    source: "local",
+  },
+];
+

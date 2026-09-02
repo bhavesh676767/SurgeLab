@@ -75,3 +75,34 @@ export interface PlaceSearchResult {
   category?: string;
   source?: "local" | "nominatim";
 }
+
+export interface HazardPoint {
+  lat: number;
+  lng: number;
+  name: string;
+  riskPct: number;
+  depthCm: number;
+  isUnderpass: boolean;
+}
+
+export interface RouteStep {
+  instruction: string;
+  distanceM: number;
+  durationS: number;
+  name: string;
+  waterloggingRiskPct: number;
+  isSafe: boolean;
+}
+
+export interface RouteResult {
+  coordinates: [number, number][]; // [lat, lng][]
+  distanceMeters: number;
+  durationSeconds: number;
+  avgRiskPct: number;
+  maxRiskPct: number;
+  maxDepthCm: number;
+  hazardLocations: HazardPoint[];
+  steps: RouteStep[];
+  isSafeRoute: boolean;
+  summary: string;
+}

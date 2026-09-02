@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useCallback } from "react";
 import { useMap } from "react-leaflet";
 import L from "leaflet";
 import { useMapStore } from "@/store/mapStore";
@@ -10,6 +10,8 @@ import {
   terrainRiskStyle,
   type TerrainRiskSample,
 } from "@/services/terrainRiskEngine";
+
+const CANVAS_PAD = 0.5;
 
 function paintPool(
   ctx: CanvasRenderingContext2D,
@@ -34,21 +36,28 @@ function paintTerrainCanvas(
   canvas: HTMLCanvasElement,
   map: L.Map,
   samples: TerrainRiskSample[],
+  paddedBounds: L.LatLngBounds,
 ) {
-  const size = map.getSize();
-  const topLeft = map.containerPointToLayerPoint(L.point(0, 0));
+  const nw = paddedBounds.getNorthWest();
+  const se = paddedBounds.getSouthEast();
+  const topLeft = map.latLngToLayerPoint(nw);
+  const bottomRight = map.latLngToLayerPoint(se);
 
-  canvas.width = size.x;
-  canvas.height = size.y;
+  const width = Math.max(1, Math.ceil(bottomRight.x - topLeft.x));
+  const height = Math.max(1, Math.ceil(bottomRight.y - topLeft.y));
+
+  if (canvas.width !== width || canvas.height !== height) {
+    canvas.width = width;
+    canvas.height = height;
+  }
   L.DomUtil.setPosition(canvas, topLeft);
 
-  const ctx = canvas.getContext("2d");
+  const ctx = canvas.getContext("2d", { alpha: true });
   if (!ctx) return;
 
-  ctx.clearRect(0, 0, size.x, size.y);
+  ctx.clearRect(0, 0, width, height);
 
-  const bounds = map.getBounds();
-  const visible = samplesInBounds(samples, bounds);
+  const visible = samplesInBounds(samples, paddedBounds);
   if (visible.length === 0) return;
 
   const centerLat = map.getCenter().lat;
@@ -61,10 +70,10 @@ function paintTerrainCanvas(
     const layerPt = map.latLngToLayerPoint([sample.lat, sample.lng]);
     const x = layerPt.x - topLeft.x;
     const y = layerPt.y - topLeft.y;
-    const outerR = Math.min(style.radiusM / mpp, size.x * 0.35);
+    const outerR = Math.min(style.radiusM / mpp, width * 0.35);
     const haloR = outerR * 1.25;
 
-    if (x < -haloR || y < -haloR || x > size.x + haloR || y > size.y + haloR) {
+    if (x < -haloR || y < -haloR || x > width + haloR || y > height + haloR) {
       continue;
     }
 
@@ -89,6 +98,8 @@ export function TerrainRiskLayer() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const layerRef = useRef<L.Layer | null>(null);
   const samplesRef = useRef<TerrainRiskSample[]>([]);
+  const renderedBoundsRef = useRef<L.LatLngBounds | null>(null);
+  const rafRef = useRef<number | null>(null);
 
   const mlRecords = useMapStore((s) => s.mlRecords);
   const incidents = useMapStore((s) => s.incidents);
@@ -114,27 +125,55 @@ export function TerrainRiskLayer() {
 
   samplesRef.current = samples;
 
+  const redraw = useCallback(() => {
+    if (!canvasRef.current || !showTerrainPaint) return;
+    const padded = map.getBounds().pad(CANVAS_PAD);
+    renderedBoundsRef.current = padded;
+    paintTerrainCanvas(canvasRef.current, map, samplesRef.current, padded);
+  }, [map, showTerrainPaint]);
+
+  const scheduleRedraw = useCallback(() => {
+    if (rafRef.current !== null) return;
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = null;
+      redraw();
+    });
+  }, [redraw]);
+
+  const onMapMove = useCallback(() => {
+    const rendered = renderedBoundsRef.current;
+    if (!rendered) {
+      scheduleRedraw();
+      return;
+    }
+    const currentBounds = map.getBounds();
+    if (
+      currentBounds.getSouth() < rendered.getSouth() ||
+      currentBounds.getNorth() > rendered.getNorth() ||
+      currentBounds.getWest() < rendered.getWest() ||
+      currentBounds.getEast() > rendered.getEast()
+    ) {
+      scheduleRedraw();
+    }
+  }, [map, scheduleRedraw]);
+
   useEffect(() => {
     if (!showTerrainPaint) return;
 
     const pane = map.getPane("terrainRiskPane") ?? map.createPane("terrainRiskPane");
     pane.style.zIndex = "350";
-    pane.className = "leaflet-terrainRiskPane";
+    pane.classList.add("leaflet-terrainRiskPane");
 
     const canvas = L.DomUtil.create("canvas", "terrain-risk-canvas") as HTMLCanvasElement;
     canvas.style.pointerEvents = "none";
+    canvas.style.willChange = "transform";
     pane.appendChild(canvas);
     canvasRef.current = canvas;
-
-    const redraw = () => {
-      if (!canvasRef.current) return;
-      paintTerrainCanvas(canvasRef.current, map, samplesRef.current);
-    };
 
     const TerrainLayer = L.Layer.extend({
       onAdd(this: L.Layer & { _map?: L.Map }) {
         this._map = map;
-        redraw();
+        scheduleRedraw();
       },
       onRemove() {
         /* cleaned up in effect */
@@ -145,10 +184,12 @@ export function TerrainRiskLayer() {
     layerRef.current = layer;
     layer.addTo(map);
 
-    map.on("move", redraw);
-    map.on("zoom", redraw);
-    map.on("resize", redraw);
-    redraw();
+    map.on("move", onMapMove);
+    map.on("moveend", scheduleRedraw);
+    map.on("zoomend", scheduleRedraw);
+    map.on("viewreset", scheduleRedraw);
+    map.on("resize", scheduleRedraw);
+    scheduleRedraw();
 
     const onClick = (e: L.LeafletMouseEvent) => {
       const hit = nearestTerrainSample(
@@ -162,21 +203,23 @@ export function TerrainRiskLayer() {
     map.on("click", onClick);
 
     return () => {
-      map.off("move", redraw);
-      map.off("zoom", redraw);
-      map.off("resize", redraw);
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+      map.off("move", onMapMove);
+      map.off("moveend", scheduleRedraw);
+      map.off("zoomend", scheduleRedraw);
+      map.off("viewreset", scheduleRedraw);
+      map.off("resize", scheduleRedraw);
       map.off("click", onClick);
       layer.remove();
       canvas.remove();
       canvasRef.current = null;
       layerRef.current = null;
     };
-  }, [map, setSelectedTerrain, showTerrainPaint]);
+  }, [map, setSelectedTerrain, showTerrainPaint, onMapMove, scheduleRedraw]);
 
   useEffect(() => {
-    if (!canvasRef.current || !showTerrainPaint) return;
-    paintTerrainCanvas(canvasRef.current, map, samples);
-  }, [map, samples, showTerrainPaint]);
+    scheduleRedraw();
+  }, [samples, scheduleRedraw]);
 
   return null;
 }

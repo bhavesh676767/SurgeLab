@@ -1,94 +1,162 @@
 @import "tailwindcss";
 
+/* --- Design Tokens ----------------------------------------------------------- */
+
 @theme {
-  --animate-splash-icon: splash-icon-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+  --font-sans: "Satoshi", "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  --shadow-xs:       0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-card:     0 1px 3px rgba(15, 23, 42, 0.06), 0 4px 16px rgba(15, 23, 42, 0.07);
+  --shadow-float:    0 4px 24px rgba(15, 23, 42, 0.13), 0 1px 4px rgba(15, 23, 42, 0.06);
+  --shadow-sheet:    0 -2px 32px rgba(15, 23, 42, 0.14), 0 -1px 6px rgba(15, 23, 42, 0.05);
+  --shadow-glow-sky: 0 4px 20px rgba(14, 165, 233, 0.28);
+
+  --animate-splash-icon:     splash-icon-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
   --animate-splash-wordmark: splash-wordmark-in 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards;
-  --animate-splash-line: splash-line-in 1s cubic-bezier(0.16, 1, 0.3, 1) 0.75s forwards;
-  --animate-splash-exit: splash-exit 2.8s ease forwards;
+  --animate-splash-line:     splash-line-in 1s cubic-bezier(0.16, 1, 0.3, 1) 0.75s forwards;
+  --animate-splash-exit:     splash-exit 2.8s ease forwards;
+
+  --animate-route-draw: route-draw 1.2s ease-out forwards;
+  --animate-route-dash: route-dash 1.4s linear infinite;
+  --animate-sheet-up:   sheet-up 0.36s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-sheet-down: sheet-down 0.28s cubic-bezier(0.4, 0, 1, 1) forwards;
+  --animate-fade-in:    fade-in 0.22s ease-out forwards;
+  --animate-slide-up:   slide-up 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-hazard-in:  hazard-in 0.36s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-skeleton:   skeleton-pulse 1.6s ease-in-out infinite;
+  --animate-gps-pulse:  gps-pulse 2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+  --animate-scan-glow:  scan-glow 2s ease-in-out infinite;
 }
 
-@keyframes splash-icon-in {
-  from {
-    opacity: 0;
-    transform: scale(0.88);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes splash-wordmark-in {
-  from {
-    opacity: 0;
-    transform: translateX(-12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes splash-line-in {
-  to {
-    width: clamp(120px, 40vw, 280px);
-  }
-}
-
-@keyframes splash-exit {
-  0%,
-  75% {
-    opacity: 1;
-    pointer-events: auto;
-  }
-  100% {
-    opacity: 0;
-    pointer-events: none;
-  }
-}
-
-html,
-body,
-#root {
-  height: 100%;
-  overflow: hidden;
+html, body, #root {
+  height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden;
+  font-family: "Satoshi", "Inter", ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.012em;
 }
 
 body {
-  background: #000;
+  background: #f1f5f9;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: #0f172a;
 }
+
+* { -webkit-tap-highlight-color: transparent; }
 
 .leaflet-container {
-  background: #0a0a0a;
-  font-family: inherit;
+  height: 100% !important; width: 100% !important;
+  background: #e8edf2;
+  font-family: "Satoshi", "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
-.leaflet-terrainRiskPane,
-.terrain-risk-canvas {
-  pointer-events: none;
+.leaflet-terrainRiskPane, .terrain-risk-canvas,
+.leaflet-roadPaintPane, .road-paint-canvas { pointer-events: none; }
+
+.shadow-xs      { box-shadow: 0 1px 2px rgba(15,23,42,0.05); }
+.shadow-card    { box-shadow: 0 1px 3px rgba(15,23,42,0.06), 0 4px 16px rgba(15,23,42,0.07); }
+.shadow-float   { box-shadow: 0 4px 24px rgba(15,23,42,0.13), 0 1px 4px rgba(15,23,42,0.06); }
+.shadow-glow-sky{ box-shadow: 0 4px 20px rgba(14,165,233,0.30); }
+
+@keyframes splash-icon-in     { from{opacity:0;transform:scale(0.88)} to{opacity:1;transform:scale(1)} }
+@keyframes splash-wordmark-in { from{opacity:0;transform:translateX(-12px)} to{opacity:1;transform:translateX(0)} }
+@keyframes splash-line-in     { to{width:clamp(120px,40vw,280px)} }
+@keyframes splash-exit        { 0%,75%{opacity:1;pointer-events:auto} 100%{opacity:0;pointer-events:none} }
+
+@keyframes route-draw { from{stroke-dashoffset:2000} to{stroke-dashoffset:0} }
+@keyframes route-dash { from{stroke-dashoffset:48} to{stroke-dashoffset:0} }
+
+.safe-route-line {
+  filter: drop-shadow(0 0 8px rgba(2,132,199,0.65)) drop-shadow(0 0 2px rgba(56,189,248,0.4));
+}
+.animated-route-yellow {
+  stroke-dasharray: 10 12 !important;
+  animation: route-dash 1.4s linear infinite !important;
+  filter: drop-shadow(0 0 6px rgba(234,179,8,0.7));
 }
 
-.terrain-risk-canvas {
-  /* blur handled in-canvas; no CSS filter — avoids layer drift artifacts */
+@keyframes sheet-up   { from{transform:translateY(100%);opacity:0} to{transform:translateY(0);opacity:1} }
+@keyframes sheet-down { from{transform:translateY(0);opacity:1} to{transform:translateY(100%);opacity:0} }
+.sheet-enter { animation: sheet-up 0.36s cubic-bezier(0.16,1,0.3,1) forwards; }
+.sheet-exit  { animation: sheet-down 0.28s cubic-bezier(0.4,0,1,1) forwards; }
+.pb-safe     { padding-bottom: max(1.25rem, env(safe-area-inset-bottom)); }
+
+@keyframes fade-in  { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
+@keyframes slide-up { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+.fade-in  { animation: fade-in 0.22s ease-out forwards; }
+.slide-up { animation: slide-up 0.24s cubic-bezier(0.16,1,0.3,1) forwards; }
+
+@keyframes hazard-in { from{transform:translateY(120%);opacity:0} to{transform:translateY(0);opacity:1} }
+.hazard-callout-enter { animation: hazard-in 0.36s cubic-bezier(0.16,1,0.3,1) forwards; }
+
+@keyframes skeleton-pulse { 0%,100%{opacity:1} 50%{opacity:0.45} }
+.skeleton {
+  animation: skeleton-pulse 1.6s ease-in-out infinite;
+  background: #e2e8f0; border-radius: 8px;
 }
 
-.leaflet-roadPaintPane,
-.road-paint-canvas {
-  pointer-events: none;
+@keyframes gps-pulse { 0%{transform:scale(0.95);opacity:0.9} 50%{transform:scale(1.4);opacity:0.3} 100%{transform:scale(1.7);opacity:0} }
+.gps-pulse-ring    { animation: gps-pulse 2s cubic-bezier(0.24,0,0.38,1) infinite; }
+.marker-pulse-ring { animation: gps-pulse 2s cubic-bezier(0.24,0,0.38,1) infinite; }
+
+@keyframes scan-glow { 0%,100%{opacity:0.6;transform:translateX(-100%)} 50%{opacity:1;transform:translateX(100%)} }
+.animate-scan-glow { animation: scan-glow 2s ease-in-out infinite; }
+
+.safe-route-glow { filter: drop-shadow(0 0 10px rgba(2,132,199,0.85)); }
+.safe-route-blue { filter: drop-shadow(0 0 6px rgba(37,99,235,0.9)); }
+
+::-webkit-scrollbar       { width:3px; height:3px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:9999px; }
+::-webkit-scrollbar-thumb:hover { background:#94a3b8; }
+.no-scrollbar::-webkit-scrollbar { display:none; }
+.no-scrollbar { -ms-overflow-style:none; scrollbar-width:none; }
+
+.glass {
+  background: rgba(255,255,255,0.90);
+  backdrop-filter: blur(20px) saturate(1.6);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
 }
 
-/* Road risk — solid lines on street geometry */
+/* Leaflet custom modern boxy popup */
+.leaflet-popup-content-wrapper {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border-radius: 16px !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04) !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
 
-@media (prefers-reduced-motion: reduce) {
-  .animate-splash-icon,
-  .animate-splash-wordmark,
-  .animate-splash-line,
-  .animate-splash-exit {
-    animation: none !important;
-    opacity: 1;
-    transform: none;
-    width: clamp(120px, 40vw, 280px);
+.leaflet-popup-content {
+  margin: 12px 14px !important;
+  line-height: 1.4 !important;
+}
+
+.leaflet-popup-tip {
+  background: #ffffff !important;
+  box-shadow: none !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+  top: 10px !important;
+  right: 10px !important;
+  color: #94a3b8 !important;
+  font-size: 16px !important;
+  padding: 2px !important;
+  transition: color 0.15s ease !important;
+}
+
+.leaflet-container a.leaflet-popup-close-button:hover {
+  color: #0f172a !important;
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .animated-route-yellow,.gps-pulse-ring,.marker-pulse-ring,.animate-scan-glow,
+  .sheet-enter,.sheet-exit,.hazard-callout-enter,.fade-in,.slide-up,.skeleton {
+    animation:none !important; opacity:1; transform:none;
   }
+  .skeleton { background:#e2e8f0; }
 }
+

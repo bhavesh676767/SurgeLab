@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { Plus, Minus, Locate, Satellite } from "lucide-react";
+import { Plus, Minus, Locate, Satellite, Droplets, HelpCircle } from "lucide-react";
 import { useMap } from "react-leaflet";
 import { useLocation } from "@/hooks/useLocation";
 import { useMapStore } from "@/store/mapStore";
@@ -11,6 +10,8 @@ export function CustomControls() {
   const viewport = useMapStore((s) => s.viewport);
   const basemapMode = useMapStore((s) => s.basemapMode);
   const toggleSatellite = useMapStore((s) => s.toggleSatellite);
+  const isWaterloggingSheetOpen = useMapStore((s) => s.isWaterloggingSheetOpen);
+  const setWaterloggingSheetOpen = useMapStore((s) => s.setWaterloggingSheetOpen);
 
   const { requestLocation } = useLocation({
     onLocation: (loc, acc) => {
@@ -44,6 +45,25 @@ export function CustomControls() {
         >
           <Satellite className="h-4 w-4" />
         </ControlButton>
+      </div>
+
+      {/* Waterlogging Map Sheet Trigger Button */}
+      <div className="absolute left-4 top-72 z-[1100] sm:left-6">
+        <button
+          type="button"
+          onClick={() => setWaterloggingSheetOpen(!isWaterloggingSheetOpen)}
+          aria-label="Open Waterlogging Map Sheet"
+          aria-expanded={isWaterloggingSheetOpen}
+          className={`flex h-11 items-center gap-2.5 rounded-2xl border px-3.5 text-xs font-bold shadow-2xl backdrop-blur-xl transition active:scale-95 ${
+            isWaterloggingSheetOpen
+              ? "border-cyan-400 bg-cyan-400 text-black shadow-cyan-400/25"
+              : "border-white/15 bg-black/90 text-white hover:border-cyan-400/50 hover:bg-white/10"
+          }`}
+        >
+          <Droplets className={`h-4 w-4 ${isWaterloggingSheetOpen ? "text-black" : "text-cyan-400"}`} />
+          <span>Waterlogging Sheet</span>
+          <div className="h-2 w-7 rounded-full bg-gradient-to-r from-emerald-400 via-yellow-400 to-red-500 shadow-sm" />
+        </button>
       </div>
 
       <div className="pointer-events-none absolute bottom-6 left-4 z-[1000] sm:bottom-8 sm:left-6">

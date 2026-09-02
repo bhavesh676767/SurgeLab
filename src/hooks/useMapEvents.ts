@@ -7,12 +7,20 @@ export function useMapEvents() {
   const setViewport = useMapStore((s) => s.setViewport);
 
   useEffect(() => {
+    if (!map) return;
+
     const onMove = () => {
-      const center = map.getCenter();
-      setViewport({
-        center: { lat: center.lat, lng: center.lng },
-        zoom: map.getZoom(),
-      });
+      try {
+        const center = map.getCenter();
+        if (center && typeof center.lat === 'number' && typeof center.lng === 'number') {
+          setViewport({
+            center: { lat: center.lat, lng: center.lng },
+            zoom: map.getZoom(),
+          });
+        }
+      } catch {
+        // Guard against map teardown race condition
+      }
     };
 
     map.on("moveend", onMove);

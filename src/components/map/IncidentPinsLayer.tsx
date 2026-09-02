@@ -45,28 +45,29 @@ function incidentIcon(severity: number): L.DivIcon {
 
 function IncidentPopup({ incident }: { incident: FloodIncident }) {
   return (
-    <div className="min-w-[200px] space-y-2 p-1 text-sm text-gray-900">
-      <p className="font-semibold leading-snug">{incident.location_name}</p>
-      <p className="text-xs text-gray-500">{incident.sector}</p>
-      <dl className="grid grid-cols-2 gap-2 text-xs">
-        <div>
-          <dt className="text-gray-400">Severity</dt>
-          <dd className="font-medium">{severityLabel(incident.severity)}</dd>
+    <div className="min-w-[200px] space-y-2 text-left select-none">
+      <div className="flex items-center gap-1.5 pb-1 border-b border-slate-100">
+        <span className="h-1.5 w-1.5 rounded-full bg-slate-700" />
+        <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Flood Incident Log</p>
+      </div>
+
+      <div>
+        <p className="font-bold text-xs text-slate-900 leading-snug">{incident.location_name}</p>
+        <p className="text-[11px] text-slate-500">{incident.sector}</p>
+      </div>
+
+      <div className="grid grid-cols-2 gap-1.5 pt-0.5 text-center text-xs">
+        <div className="rounded-lg bg-slate-50 border border-slate-200/60 p-1.5">
+          <p className="text-[9px] uppercase tracking-wider text-slate-400 font-bold">Severity</p>
+          <p className="font-bold text-slate-900 mt-0.5">{severityLabel(incident.severity)}</p>
         </div>
-        <div>
-          <dt className="text-gray-400">Depth</dt>
-          <dd className="font-medium">{incident.depth_cm} cm</dd>
+        <div className="rounded-lg bg-slate-50 border border-slate-200/60 p-1.5">
+          <p className="text-[9px] uppercase tracking-wider text-slate-400 font-bold">Depth</p>
+          <p className="font-mono font-bold text-sky-600 mt-0.5">{incident.depth_cm} cm</p>
         </div>
-        <div>
-          <dt className="text-gray-400">Duration</dt>
-          <dd className="font-medium">{incident.duration_minutes} min</dd>
-        </div>
-        <div>
-          <dt className="text-gray-400">Date</dt>
-          <dd className="font-medium">{incident.date}</dd>
-        </div>
-      </dl>
-      <p className="text-[10px] text-gray-400">{incident.time}</p>
+      </div>
+
+      <p className="text-[10px] text-slate-400 font-medium">Logged: {incident.date} · {incident.time}</p>
     </div>
   );
 }

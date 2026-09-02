@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { useMap } from "react-leaflet";
 import L from "leaflet";
 import { useMapStore } from "@/store/mapStore";
@@ -6,81 +6,13 @@ import {
   buildPaintedRoadList,
   highwaysForZoom,
   inferAccurateRiskAtPoint,
+  RoadSpatialIndex,
   type PaintedRoadSegment,
 } from "@/services/roadRiskService";
 import { MlSpatialIndex } from "@/services/mlSpatialIndex";
 import type { TerrainRiskSample } from "@/services/terrainRiskEngine";
 
-function roadsInView(
-  roads: PaintedRoadSegment[],
-  bounds: L.LatLngBounds,
-  pad = 0.01,
-): PaintedRoadSegment[] {
-  const south = bounds.getSouth() - pad;
-  const north = bounds.getNorth() + pad;
-  const west = bounds.getWest() - pad;
-  const east = bounds.getEast() + pad;
-
-  return roads.filter(
-    (r) =>
-      r.maxLat >= south &&
-      r.minLat <= north &&
-      r.maxLng >= west &&
-      r.minLng <= east,
-  );
-}
-
-function paintRoadsCanvas(
-  canvas: HTMLCanvasElement,
-  map: L.Map,
-  roads: PaintedRoadSegment[],
-) {
-  const size = map.getSize();
-  const topLeft = map.containerPointToLayerPoint(L.point(0, 0));
-  const zoom = map.getZoom();
-  const allowed = highwaysForZoom(zoom);
-
-  canvas.width = size.x;
-  canvas.height = size.y;
-  L.DomUtil.setPosition(canvas, topLeft);
-
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return;
-
-  ctx.clearRect(0, 0, size.x, size.y);
-
-  const bounds = map.getBounds();
-  const visible = roadsInView(roads, bounds);
-
-  ctx.lineCap = "round";
-  ctx.lineJoin = "round";
-
-  for (const road of visible) {
-    if (!allowed.has(road.highway)) continue;
-
-    ctx.beginPath();
-    let started = false;
-    for (const [lat, lng] of road.latlngs) {
-      const pt = map.latLngToLayerPoint([lat, lng]);
-      const x = pt.x - topLeft.x;
-      const y = pt.y - topLeft.y;
-      if (!started) {
-        ctx.moveTo(x, y);
-        started = true;
-      } else {
-        ctx.lineTo(x, y);
-      }
-    }
-    if (!started) continue;
-
-    ctx.strokeStyle = road.color;
-    ctx.globalAlpha = road.opacity;
-    ctx.lineWidth = road.weight;
-    ctx.stroke();
-  }
-
-  ctx.globalAlpha = 1;
-}
+const CANVAS_PAD = 0.5; // 50% viewport buffer around view for 60fps native GPU panning
 
 function findRoadAt(
   map: L.Map,
@@ -91,7 +23,7 @@ function findRoadAt(
 ): PaintedRoadSegment | null {
   const allowed = highwaysForZoom(zoom);
   const clickPt = map.latLngToContainerPoint([lat, lng]);
-  const threshold = 10;
+  const threshold = 12;
   let best: PaintedRoadSegment | null = null;
   let bestDist = threshold;
 
@@ -132,7 +64,9 @@ export function RoadRiskLayer() {
   const map = useMap();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const roadsRef = useRef<PaintedRoadSegment[]>([]);
+  const spatialIndexRef = useRef<RoadSpatialIndex | null>(null);
   const mlIndexRef = useRef<MlSpatialIndex | null>(null);
+  const renderedBoundsRef = useRef<L.LatLngBounds | null>(null);
   const rafRef = useRef<number | null>(null);
 
   const [rawRoads, setRawRoads] = useState<GeoJSON.FeatureCollection | null>(null);
@@ -155,7 +89,7 @@ export function RoadRiskLayer() {
   const paintedRoads = useMemo(() => {
     if (!rawRoads || mlRecords.length === 0) return [];
     mlIndexRef.current = new MlSpatialIndex(mlRecords);
-    return buildPaintedRoadList(
+    const roads = buildPaintedRoadList(
       rawRoads,
       mlRecords,
       incidents,
@@ -163,46 +97,164 @@ export function RoadRiskLayer() {
       weather?.rain ?? 0,
       weather?.precipitation ?? 0,
     );
+    spatialIndexRef.current = new RoadSpatialIndex(roads);
+    return roads;
   }, [rawRoads, mlRecords, incidents, stormIntensity, weather]);
 
   roadsRef.current = paintedRoads;
 
+  const redraw = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || roadsRef.current.length === 0) return;
+
+    const zoom = map.getZoom();
+    const allowed = highwaysForZoom(zoom);
+    const mapBounds = map.getBounds();
+    const paddedBounds = mapBounds.pad(CANVAS_PAD);
+    renderedBoundsRef.current = paddedBounds;
+
+    const nw = paddedBounds.getNorthWest();
+    const se = paddedBounds.getSouthEast();
+    const topLeft = map.latLngToLayerPoint(nw);
+    const bottomRight = map.latLngToLayerPoint(se);
+
+    const width = Math.max(1, Math.ceil(bottomRight.x - topLeft.x));
+    const height = Math.max(1, Math.ceil(bottomRight.y - topLeft.y));
+
+    if (canvas.width !== width || canvas.height !== height) {
+      canvas.width = width;
+      canvas.height = height;
+    }
+    L.DomUtil.setPosition(canvas, topLeft);
+
+    const ctx = canvas.getContext("2d", { alpha: true });
+    if (!ctx) return;
+
+    ctx.clearRect(0, 0, width, height);
+
+    // Query spatial index for candidate roads inside padded bounds
+    const index = spatialIndexRef.current;
+    const candidates = index
+      ? index.query(paddedBounds)
+      : roadsRef.current;
+
+    if (candidates.length === 0) return;
+
+    // Group roads by style to batch draw calls into a handful of strokes
+    const groups = new Map<
+      string,
+      {
+        color: string;
+        weight: number;
+        opacity: number;
+        roads: PaintedRoadSegment[];
+      }
+    >();
+
+    for (const road of candidates) {
+      if (!allowed.has(road.highway)) continue;
+      const key = `${road.color}|${road.weight}|${road.opacity}`;
+      let group = groups.get(key);
+      if (!group) {
+        group = {
+          color: road.color,
+          weight: road.weight,
+          opacity: road.opacity,
+          roads: [],
+        };
+        groups.set(key, group);
+      }
+      group.roads.push(road);
+    }
+
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
+    for (const group of groups.values()) {
+      ctx.strokeStyle = group.color;
+      ctx.lineWidth = group.weight;
+      ctx.globalAlpha = group.opacity;
+      ctx.beginPath();
+
+      for (const road of group.roads) {
+        let started = false;
+        for (let i = 0; i < road.latlngs.length; i++) {
+          const pt = map.latLngToLayerPoint(road.latlngs[i]);
+          const x = pt.x - topLeft.x;
+          const y = pt.y - topLeft.y;
+          if (!started) {
+            ctx.moveTo(x, y);
+            started = true;
+          } else {
+            ctx.lineTo(x, y);
+          }
+        }
+      }
+
+      ctx.stroke();
+    }
+
+    ctx.globalAlpha = 1;
+  }, [map]);
+
+  const scheduleRedraw = useCallback(() => {
+    if (rafRef.current !== null) return;
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = null;
+      redraw();
+    });
+  }, [redraw]);
+
+  // Check on move if current viewport exceeds buffered canvas area
+  const onMapMove = useCallback(() => {
+    const rendered = renderedBoundsRef.current;
+    if (!rendered) {
+      scheduleRedraw();
+      return;
+    }
+    const currentBounds = map.getBounds();
+    // Only schedule redraw if the user has dragged beyond our padded bounds
+    if (
+      currentBounds.getSouth() < rendered.getSouth() ||
+      currentBounds.getNorth() > rendered.getNorth() ||
+      currentBounds.getWest() < rendered.getWest() ||
+      currentBounds.getEast() > rendered.getEast()
+    ) {
+      scheduleRedraw();
+    }
+  }, [map, scheduleRedraw]);
+
   useEffect(() => {
     const pane = map.getPane("roadPaintPane") ?? map.createPane("roadPaintPane");
     pane.style.zIndex = "450";
-    pane.className = "leaflet-roadPaintPane";
+    pane.classList.add("leaflet-roadPaintPane");
 
     const canvas = L.DomUtil.create("canvas", "road-paint-canvas") as HTMLCanvasElement;
     canvas.style.pointerEvents = "none";
+    canvas.style.willChange = "transform";
     pane.appendChild(canvas);
     canvasRef.current = canvas;
 
-    const redraw = () => {
-      if (!canvasRef.current) return;
-      paintRoadsCanvas(canvasRef.current, map, roadsRef.current);
-    };
-
-    const scheduleRedraw = () => {
-      if (rafRef.current !== null) return;
-      rafRef.current = requestAnimationFrame(() => {
-        rafRef.current = null;
-        redraw();
-      });
-    };
-
     const layer = L.layerGroup().addTo(map);
-    redraw();
+    scheduleRedraw();
 
-    map.on("move", scheduleRedraw);
-    map.on("zoom", scheduleRedraw);
+    map.on("move", onMapMove);
+    map.on("moveend", scheduleRedraw);
+    map.on("zoomend", scheduleRedraw);
+    map.on("viewreset", scheduleRedraw);
     map.on("resize", scheduleRedraw);
 
     const onClick = (e: L.LeafletMouseEvent) => {
+      const index = spatialIndexRef.current;
+      const candidates = index
+        ? index.queryPoint(e.latlng.lat, e.latlng.lng, 0.003)
+        : roadsRef.current;
+
       const hit = findRoadAt(
         map,
         e.latlng.lat,
         e.latlng.lng,
-        roadsRef.current,
+        candidates,
         map.getZoom(),
       );
       if (!hit) {
@@ -239,20 +291,21 @@ export function RoadRiskLayer() {
 
     return () => {
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
-      map.off("move", scheduleRedraw);
-      map.off("zoom", scheduleRedraw);
+      map.off("move", onMapMove);
+      map.off("moveend", scheduleRedraw);
+      map.off("zoomend", scheduleRedraw);
+      map.off("viewreset", scheduleRedraw);
       map.off("resize", scheduleRedraw);
       map.off("click", onClick);
       layer.remove();
       canvas.remove();
       canvasRef.current = null;
     };
-  }, [map, setSelectedTerrain]);
+  }, [map, setSelectedTerrain, onMapMove, scheduleRedraw, incidents, stormIntensity, weather]);
 
   useEffect(() => {
-    if (!canvasRef.current) return;
-    paintRoadsCanvas(canvasRef.current, map, paintedRoads);
-  }, [map, paintedRoads]);
+    scheduleRedraw();
+  }, [paintedRoads, scheduleRedraw]);
 
   return null;
 }

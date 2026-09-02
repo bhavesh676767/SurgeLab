@@ -1,6 +1,6 @@
 function parseCsv(text: string): string[][] {
-  const lines = text.trim().split("\n");
-  return lines.map((line) => line.split(","));
+  const lines = text.trim().split(/\r?\n/).filter((l) => l.trim().length > 0);
+  return lines.map((line) => line.split(",").map((cell) => cell.trim()));
 }
 
 function num(value: string): number {
