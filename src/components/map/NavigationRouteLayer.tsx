@@ -89,12 +89,13 @@ export function NavigationRouteLayer() {
 
   const lastFittedBoundsKey = useRef<string>('');
 
-  // Fit bounds smoothly ONCE when routes are calculated or updated
+  // Fit bounds smoothly ONCE when safe route is ready
   useEffect(() => {
     if (!origin || !destination) return;
     if (!safeRoute && !idealRoute) return;
+    if (routeStage !== 'safe') return;
 
-    const key = `${origin.location.lat.toFixed(4)},${origin.location.lng.toFixed(4)}->${destination.location.lat.toFixed(4)},${destination.location.lng.toFixed(4)}-${routeStage}`;
+    const key = `${origin.location.lat.toFixed(4)},${origin.location.lng.toFixed(4)}->${destination.location.lat.toFixed(4)},${destination.location.lng.toFixed(4)}`;
     if (lastFittedBoundsKey.current === key) return;
     lastFittedBoundsKey.current = key;
 
@@ -107,7 +108,7 @@ export function NavigationRouteLayer() {
     } else if (idealRoute?.coordinates?.length) {
       for (const [lat, lng] of idealRoute.coordinates) bounds.extend([lat, lng]);
     }
-    map.fitBounds(bounds, { padding: [60, 60], maxZoom: 15, animate: true, duration: 0.8 });
+    map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15, animate: true, duration: 0.7 });
   }, [map, origin, destination, safeRoute, idealRoute, routeStage]);
 
   // Handle map click to pick location

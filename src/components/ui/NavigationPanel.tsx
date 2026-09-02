@@ -21,6 +21,8 @@ export function NavigationPanel() {
   const weather = useMapStore((s) => s.weather);
   const mlRecords = useMapStore((s) => s.mlRecords);
   const incidents = useMapStore((s) => s.incidents);
+  const safeRoute = useMapStore((s) => s.safeRoute);
+  const routeStage = useMapStore((s) => s.routeStage);
 
   const setAppMode = useMapStore((s) => s.setAppMode);
   const setOrigin = useMapStore((s) => s.setOrigin);
@@ -100,26 +102,26 @@ export function NavigationPanel() {
     if (!origin || !destination) return;
 
     const routeKey = `${origin.location.lat.toFixed(4)},${origin.location.lng.toFixed(4)}->${destination.location.lat.toFixed(4)},${destination.location.lng.toFixed(4)}-${stormIntensity}`;
-    if (lastRouteKeyRef.current === routeKey) return;
+    if (lastRouteKeyRef.current === routeKey && safeRoute && routeStage === 'safe') return;
     lastRouteKeyRef.current = routeKey;
 
     if (analyzeTimerRef.current) clearInterval(analyzeTimerRef.current);
     
     setIsCalculatingRoute(true);
     setRouteStage('ideal');
-    setAnalyzingProgress(15);
+    setAnalyzingProgress(25);
     setAnalyzingText('Scanning street elevation & drain distances…');
 
-    // Smooth ticker from 15% -> 85%
-    let curProgress = 15;
+    // Smooth ticker
+    let curProgress = 25;
     analyzeTimerRef.current = setInterval(() => {
-      curProgress += Math.floor(Math.random() * 8) + 4;
-      if (curProgress > 88) curProgress = 88;
+      curProgress += 12;
+      if (curProgress > 90) curProgress = 90;
       setAnalyzingProgress(curProgress);
-      if (curProgress < 40) setAnalyzingText('Evaluating street elevations & drain proximity…');
-      else if (curProgress < 75) setAnalyzingText('Cross-referencing storm intensity & underpass risk…');
+      if (curProgress < 50) setAnalyzingText('Evaluating street elevations & drain proximity…');
+      else if (curProgress < 80) setAnalyzingText('Cross-referencing storm intensity & underpass risk…');
       else setAnalyzingText('Optimising safer bypass corridor…');
-    }, 120);
+    }, 80);
 
     try {
       const mlIndex = new MlSpatialIndex(mlRecords);
@@ -135,12 +137,9 @@ export function NavigationPanel() {
       setAnalyzingProgress(100);
       setAnalyzingText('Safe corridor calculated');
       setRoutes(ideal, safe);
-
-      setTimeout(() => {
-        setRouteStage('safe');
-        setIsCalculatingRoute(false);
-        setActiveRouteTab('safe');
-      }, 180);
+      setRouteStage('safe');
+      setIsCalculatingRoute(false);
+      setActiveRouteTab('safe');
     } catch (err) {
       console.warn('[RoutePipeline] Fallback route applied:', err);
       if (analyzeTimerRef.current) clearInterval(analyzeTimerRef.current);
@@ -149,7 +148,7 @@ export function NavigationPanel() {
       setIsCalculatingRoute(false);
       setActiveRouteTab('safe');
     }
-  }, [origin, destination, mlRecords, weather?.rain, weather?.precipitation, incidents, stormIntensity, setRouteStage, setRoutes, setIsCalculatingRoute, setAnalyzingProgress, setAnalyzingText, setActiveRouteTab]);
+  }, [origin, destination, safeRoute, routeStage, mlRecords, weather?.rain, weather?.precipitation, incidents, stormIntensity, setRouteStage, setRoutes, setIsCalculatingRoute, setAnalyzingProgress, setAnalyzingText, setActiveRouteTab]);
 
   useEffect(() => {
     if (appMode === 'routes' && origin && destination) runRoutePipeline();
