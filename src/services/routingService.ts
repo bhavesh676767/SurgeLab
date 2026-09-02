@@ -2,7 +2,11 @@ import type { FloodIncident, LatLng, RouteResult, HazardPoint, RouteStep } from 
 import { MlSpatialIndex } from './mlSpatialIndex';
 import { inferAccurateRiskAtPoint } from './roadRiskService';
 
-const OSRM_BASE = 'https://router.project-osrm.org/route/v1/driving';
+// OSRM public mirrors — tried in order, first successful wins
+const OSRM_MIRRORS = [
+  'https://router.project-osrm.org/route/v1/driving',
+  'https://routing.openstreetmap.de/routed-car/route/v1/driving',
+];
 
 interface OsrmStep {
   maneuver: {
@@ -41,15 +45,6 @@ function distDeg(lat1: number, lng1: number, lat2: number, lng2: number): number
   return Math.hypot(lat1 - lat2, lng1 - lng2);
 }
 
-function approxDistanceM(coords: [number, number][]): number {
-  let m = 0;
-  for (let i = 1; i < coords.length; i++) {
-    const [lat1, lng1] = coords[i - 1];
-    const [lat2, lng2] = coords[i];
-    m += Math.hypot(lat2 - lat1, lng2 - lng1) * 111320;
-  }
-  return m;
-}
 
 function formatManeuverInstruction(step: OsrmStep): string {
   const name = step.name || 'road';
@@ -159,20 +154,24 @@ export function evaluateRouteRisk(
   };
 }
 
-async function fetchOsrmUrl(url: string, timeoutMs = 2800): Promise<OsrmRoute[] | null> {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
-  try {
-    const res = await fetch(url, { signal: controller.signal });
-    clearTimeout(timer);
-    if (!res.ok) return null;
-    const data: OsrmResponse = await res.json();
-    if (data.code !== 'Ok' || !data.routes || data.routes.length === 0) return null;
-    return data.routes;
-  } catch {
-    clearTimeout(timer);
-    return null;
+async function fetchOsrmUrl(path: string, timeoutMs = 8000): Promise<OsrmRoute[] | null> {
+  for (const mirror of OSRM_MIRRORS) {
+    const url = `${mirror}${path}`;
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const res = await fetch(url, { signal: controller.signal });
+      clearTimeout(timer);
+      if (!res.ok) continue;
+      const data: OsrmResponse = await res.json();
+      if (data.code !== 'Ok' || !data.routes || data.routes.length === 0) continue;
+      return data.routes;
+    } catch {
+      clearTimeout(timer);
+      // Try next mirror
+    }
   }
+  return null;
 }
 
 /**
@@ -188,8 +187,8 @@ export async function calculateNavigationRoutes(
   livePrecipMm: number,
 ): Promise<{ ideal: RouteResult; safe: RouteResult }> {
   // Step 1: Query primary and alternative routes from OSRM
-  const primaryUrl = `${OSRM_BASE}/${origin.lng},${origin.lat};${destination.lng},${destination.lat}?overview=full&geometries=geojson&steps=true&alternatives=true`;
-  const routes = await fetchOsrmUrl(primaryUrl);
+  const primaryPath = `/${origin.lng},${origin.lat};${destination.lng},${destination.lat}?overview=full&geometries=geojson&steps=true&alternatives=true`;
+  const routes = await fetchOsrmUrl(primaryPath);
 
   let idealCoords: [number, number][] = [];
   let idealDistance = 0;
@@ -223,20 +222,8 @@ export async function calculateNavigationRoutes(
       });
     }
   } else {
-    // Fallback path
-    idealCoords = generateDirectPath(origin, destination);
-    idealDistance = Math.round(approxDistanceM(idealCoords));
-    idealDuration = Math.round((idealDistance / 1000 / 35) * 3600);
-    idealSteps = [
-      {
-        instruction: 'Head from start towards destination',
-        distanceM: idealDistance,
-        durationS: idealDuration,
-        name: 'Main Corridor',
-        waterloggingRiskPct: 0,
-        isSafe: true,
-      },
-    ];
+    // OSRM truly unreachable — throw so the UI can show a proper error
+    throw new Error('Route unavailable. Check your internet connection and try again.');
   }
 
   // Step 2: Evaluate Ideal Route risk
@@ -321,15 +308,15 @@ export async function calculateNavigationRoutes(
 
       // Test multiple gentle offsets (300m, 550m, 800m) concurrently in parallel
       const candidateOffsets = [0.0035, -0.0035, 0.006, -0.006];
-      const detourUrls = candidateOffsets.map((offset) => {
+      const detourPaths = candidateOffsets.map((offset) => {
         const candidate: LatLng = {
           lat: peakHazard.lat + perpLat * offset,
           lng: peakHazard.lng + perpLng * offset,
         };
-        return `${OSRM_BASE}/${origin.lng},${origin.lat};${candidate.lng},${candidate.lat};${destination.lng},${destination.lat}?overview=full&geometries=geojson&steps=true`;
+        return `/${origin.lng},${origin.lat};${candidate.lng},${candidate.lat};${destination.lng},${destination.lat}?overview=full&geometries=geojson&steps=true`;
       });
 
-      const detourResults = await Promise.all(detourUrls.map((u) => fetchOsrmUrl(u, 2200)));
+      const detourResults = await Promise.all(detourPaths.map((p) => fetchOsrmUrl(p, 6000)));
 
       for (const detourRoutes of detourResults) {
         if (detourRoutes && detourRoutes.length > 0) {
@@ -404,14 +391,3 @@ export async function calculateNavigationRoutes(
   return { ideal: idealResult, safe: safeResult };
 }
 
-function generateDirectPath(origin: LatLng, destination: LatLng, points = 24): [number, number][] {
-  const path: [number, number][] = [];
-  for (let i = 0; i <= points; i++) {
-    const t = i / points;
-    const lat = origin.lat + (destination.lat - origin.lat) * t;
-    const lng = origin.lng + (destination.lng - origin.lng) * t;
-    const curve = Math.sin(t * Math.PI) * 0.0035;
-    path.push([lat + curve, lng - curve * 0.5]);
-  }
-  return path;
-}

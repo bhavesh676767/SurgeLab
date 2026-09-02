@@ -141,12 +141,12 @@ export function NavigationPanel() {
       setIsCalculatingRoute(false);
       setActiveRouteTab('safe');
     } catch (err) {
-      console.warn('[RoutePipeline] Fallback route applied:', err);
+      console.error('[RoutePipeline] Failed to fetch real route:', err);
       if (analyzeTimerRef.current) clearInterval(analyzeTimerRef.current);
-      setAnalyzingProgress(100);
-      setRouteStage('safe');
+      setAnalyzingProgress(0);
+      setAnalyzingText('Could not load route. Check connection.');
+      setRouteStage('idle');
       setIsCalculatingRoute(false);
-      setActiveRouteTab('safe');
     }
   }, [origin, destination, safeRoute, routeStage, mlRecords, weather?.rain, weather?.precipitation, incidents, stormIntensity, setRouteStage, setRoutes, setIsCalculatingRoute, setAnalyzingProgress, setAnalyzingText, setActiveRouteTab]);
 
