@@ -201,7 +201,7 @@ export function RoadRiskLayer() {
     }
 
     ctx.globalAlpha = 1;
-  }, [map]);
+  }, [map, showTerrainPaint]);
 
   const scheduleRedraw = useCallback(() => {
     if (rafRef.current !== null) return;
@@ -210,6 +210,10 @@ export function RoadRiskLayer() {
       redraw();
     });
   }, [redraw]);
+
+  useEffect(() => {
+    scheduleRedraw();
+  }, [showTerrainPaint, scheduleRedraw]);
 
   // Check on move if current viewport exceeds buffered canvas area
   const onMapMove = useCallback(() => {
