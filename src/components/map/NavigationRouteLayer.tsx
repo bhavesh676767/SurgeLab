@@ -87,9 +87,17 @@ export function NavigationRouteLayer() {
   const destinationIcon = useMemo(() => createDestinationIcon(), []);
   const probeIcon = useMemo(() => createScanProbeIcon(), []);
 
-  // Fit bounds when routes are calculated
+  const lastFittedBoundsKey = useRef<string>('');
+
+  // Fit bounds smoothly ONCE when routes are calculated or updated
   useEffect(() => {
     if (!origin || !destination) return;
+    if (!safeRoute && !idealRoute) return;
+
+    const key = `${origin.location.lat.toFixed(4)},${origin.location.lng.toFixed(4)}->${destination.location.lat.toFixed(4)},${destination.location.lng.toFixed(4)}-${routeStage}`;
+    if (lastFittedBoundsKey.current === key) return;
+    lastFittedBoundsKey.current = key;
+
     const bounds = L.latLngBounds(
       [origin.location.lat, origin.location.lng],
       [destination.location.lat, destination.location.lng],
@@ -99,8 +107,8 @@ export function NavigationRouteLayer() {
     } else if (idealRoute?.coordinates?.length) {
       for (const [lat, lng] of idealRoute.coordinates) bounds.extend([lat, lng]);
     }
-    map.flyToBounds(bounds, { padding: [70, 70], duration: 1.2 });
-  }, [map, origin, destination, safeRoute, idealRoute]);
+    map.fitBounds(bounds, { padding: [60, 60], maxZoom: 15, animate: true, duration: 0.8 });
+  }, [map, origin, destination, safeRoute, idealRoute, routeStage]);
 
   // Handle map click to pick location
   useEffect(() => {

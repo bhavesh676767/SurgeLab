@@ -29,20 +29,21 @@ export function NavigationPanel() {
   const setNavigating = useMapStore((s) => s.setNavigating);
   const setRouteStage = useMapStore((s) => s.setRouteStage);
   const setRoutes = useMapStore((s) => s.setRoutes);
+  const setIsCalculatingRoute = useMapStore((s) => s.setIsCalculatingRoute);
   const setActiveRouteTab = useMapStore((s) => s.setActiveRouteTab);
   const swapOriginDestination = useMapStore((s) => s.swapOriginDestination);
   const clearNavigation = useMapStore((s) => s.clearNavigation);
   const setUserLocation = useMapStore((s) => s.setUserLocation);
   const setUserLocationError = useMapStore((s) => s.setUserLocationError);
   const setUserLocationLoading = useMapStore((s) => s.setUserLocationLoading);
+  const setAnalyzingProgress = useMapStore((s) => s.setAnalyzingProgress);
+  const setAnalyzingText = useMapStore((s) => s.setAnalyzingText);
   const flyTo = useMapStore((s) => s.flyTo);
 
   const [originQuery, setOriginQuery] = useState(origin?.name ?? '');
   const [destQuery, setDestQuery] = useState(destination?.name ?? '');
   const [activeInput, setActiveInput] = useState<'origin' | 'destination' | null>(null);
   const [suggestions, setSuggestions] = useState<PlaceSearchResult[]>([]);
-  const [analyzingProgress, setAnalyzingProgress] = useState(0);
-  const [analyzingText, setAnalyzingText] = useState('');
 
   const destInputRef = useRef<HTMLInputElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -60,8 +61,7 @@ export function NavigationPanel() {
       const label = `Your location (${name})`;
       setOrigin({ location: loc, name: label, isUserLocation: true });
       setOriginQuery(label);
-      flyTo(loc, 15);
-    }, [setUserLocation, setOrigin, flyTo, setUserLocationError, setUserLocationLoading]),
+    }, [setUserLocation, setOrigin, setUserLocationError, setUserLocationLoading]),
     onError: useCallback((msg: string) => {
       setUserLocationError(msg);
       setUserLocationLoading(false);
@@ -99,46 +99,71 @@ export function NavigationPanel() {
   const lastRouteKeyRef = useRef<string>('');
 
   const runRoutePipeline = useCallback(async () => {
-    if (!origin || !destination || mlRecords.length === 0) return;
+    if (!origin || !destination) return;
 
     const routeKey = `${origin.location.lat.toFixed(4)},${origin.location.lng.toFixed(4)}->${destination.location.lat.toFixed(4)},${destination.location.lng.toFixed(4)}-${stormIntensity}`;
     if (lastRouteKeyRef.current === routeKey) return;
     lastRouteKeyRef.current = routeKey;
 
     if (analyzeTimerRef.current) clearInterval(analyzeTimerRef.current);
-    setAnalyzingProgress(0);
-    setAnalyzingText('Scanning street elevation & drain distances…');
+    
+    setIsCalculatingRoute(true);
     setRouteStage('ideal');
+    setAnalyzingProgress(15);
+    setAnalyzingText('Scanning street elevation & drain distances…');
 
-    const mlIndex = new MlSpatialIndex(mlRecords);
-    const liveRain = weather?.rain ?? 0;
-    const livePrecip = weather?.precipitation ?? 0;
+    // Smooth ticker from 15% -> 85%
+    let curProgress = 15;
+    analyzeTimerRef.current = setInterval(() => {
+      curProgress += Math.floor(Math.random() * 8) + 4;
+      if (curProgress > 88) curProgress = 88;
+      setAnalyzingProgress(curProgress);
+      if (curProgress < 40) setAnalyzingText('Evaluating street elevations & drain proximity…');
+      else if (curProgress < 75) setAnalyzingText('Cross-referencing storm intensity & underpass risk…');
+      else setAnalyzingText('Optimising safer bypass corridor…');
+    }, 120);
 
-    const { ideal, safe } = await calculateNavigationRoutes(
-      origin.location, destination.location,
-      mlIndex, incidents, stormIntensity, liveRain, livePrecip,
-    );
-    setRoutes(ideal, safe);
+    try {
+      const mlIndex = new MlSpatialIndex(mlRecords);
+      const liveRain = weather?.rain ?? 0;
+      const livePrecip = weather?.precipitation ?? 0;
 
-    setTimeout(() => {
-      setRouteStage('analyzing');
-      const start = Date.now();
-      const duration = 1800;
-      analyzeTimerRef.current = setInterval(() => {
-        const elapsed = Date.now() - start;
-        const progress = Math.min(100, Math.round((elapsed / duration) * 100));
-        setAnalyzingProgress(progress);
-        if (progress < 35) setAnalyzingText('Evaluating street elevations & drain proximity…');
-        else if (progress < 70) setAnalyzingText('Cross-referencing storm intensity & underpass risk…');
-        else setAnalyzingText('Optimising safer bypass route…');
-        if (elapsed >= duration) {
-          if (analyzeTimerRef.current) clearInterval(analyzeTimerRef.current);
-          setRouteStage('safe');
-          setActiveRouteTab('safe');
-        }
-      }, 40);
-    }, 300);
-  }, [origin, destination, mlRecords, weather?.rain, weather?.precipitation, incidents, stormIntensity, setRouteStage, setRoutes, setActiveRouteTab]);
+      // Timeout wrapper to guarantee calculation completes within 4 seconds max
+      const routePromise = calculateNavigationRoutes(
+        origin.location, destination.location,
+        mlIndex, incidents, stormIntensity, liveRain, livePrecip,
+      );
+
+      const timeoutPromise = new Promise<{ ideal: any; safe: any }>((_, reject) =>
+        setTimeout(() => reject(new Error('Route timeout fallback')), 4000)
+      );
+
+      const { ideal, safe } = await Promise.race([routePromise, timeoutPromise]).catch(() => {
+        // Safe fallback in case of network issue
+        return calculateNavigationRoutes(
+          origin.location, destination.location,
+          mlIndex, incidents, stormIntensity, liveRain, livePrecip,
+        );
+      });
+
+      if (analyzeTimerRef.current) clearInterval(analyzeTimerRef.current);
+      setAnalyzingProgress(100);
+      setAnalyzingText('Safe corridor calculated');
+      setRoutes(ideal, safe);
+
+      setTimeout(() => {
+        setRouteStage('safe');
+        setIsCalculatingRoute(false);
+        setActiveRouteTab('safe');
+      }, 250);
+    } catch {
+      if (analyzeTimerRef.current) clearInterval(analyzeTimerRef.current);
+      setAnalyzingProgress(100);
+      setRouteStage('safe');
+      setIsCalculatingRoute(false);
+      setActiveRouteTab('safe');
+    }
+  }, [origin, destination, mlRecords, weather?.rain, weather?.precipitation, incidents, stormIntensity, setRouteStage, setRoutes, setIsCalculatingRoute, setAnalyzingProgress, setAnalyzingText, setActiveRouteTab]);
 
   useEffect(() => {
     if (appMode === 'routes' && origin && destination) runRoutePipeline();

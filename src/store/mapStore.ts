@@ -105,6 +105,8 @@ interface MapStore {
   idealRoute: RouteResult | null;
   safeRoute: RouteResult | null;
   isCalculatingRoute: boolean;
+  analyzingProgress: number;
+  analyzingText: string;
   activeRouteTab: "safe" | "ideal";
   currentStepIndex: number;
   navigationPosition: NavigationPosition | null;
@@ -116,6 +118,8 @@ interface MapStore {
   setSmartAnalysisOpen: (open: boolean) => void;
   setSheetSnap: (snap: 'peek' | 'mid' | 'full') => void;
   setElevationModalOpen: (open: boolean) => void;
+  setAnalyzingProgress: (progress: number) => void;
+  setAnalyzingText: (text: string) => void;
 
   // Persisted settings
   navSettings: NavSettings;
@@ -219,6 +223,8 @@ export const useMapStore = create<MapStore>()(
       idealRoute: null,
       safeRoute: null,
       isCalculatingRoute: false,
+      analyzingProgress: 0,
+      analyzingText: '',
       activeRouteTab: "safe",
       currentStepIndex: 0,
       navigationPosition: null,
@@ -232,6 +238,8 @@ export const useMapStore = create<MapStore>()(
       setSmartAnalysisOpen: (open) => set({ isSmartAnalysisOpen: open }),
       setSheetSnap: (snap) => set({ sheetSnap: snap }),
       setElevationModalOpen: (open) => set({ isElevationModalOpen: open }),
+      setAnalyzingProgress: (progress) => set({ analyzingProgress: progress }),
+      setAnalyzingText: (text) => set({ analyzingText: text }),
 
       // Settings (persisted)
       navSettings: DEFAULT_NAV_SETTINGS,
@@ -344,6 +352,9 @@ export const useMapStore = create<MapStore>()(
           routeStage: "idle",
           idealRoute: null,
           safeRoute: null,
+          isCalculatingRoute: false,
+          analyzingProgress: 0,
+          analyzingText: '',
           pickingLocationOnMap: null,
           appMode: "home",
           currentStepIndex: 0,
