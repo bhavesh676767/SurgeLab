@@ -63,25 +63,25 @@ export function RouteElevationChart({ safeRoute, idealRoute }: RouteElevationCha
   const activeSample = hoverIndex !== null ? samples[hoverIndex] : samples[Math.floor(samples.length / 2)];
 
   return (
-    <div className="rounded-3xl bg-slate-900 text-white p-4 shadow-xl border border-slate-800 space-y-3.5 select-none">
+    <div className="rounded-2xl bg-white border border-slate-200/90 shadow-sm p-4 space-y-3.5 select-none">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-sky-500/20 text-sky-400 border border-sky-500/30">
+          <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-slate-100 text-slate-700 border border-slate-200">
             <Mountain className="h-4 w-4" />
           </div>
           <div>
-            <p className="text-xs font-bold text-white tracking-tight">Corridor Elevation & Waterline</p>
-            <p className="text-[10px] text-slate-400 font-medium">Topographic clearance comparison</p>
+            <p className="text-xs font-bold text-slate-900 tracking-tight">Corridor Elevation & Waterline</p>
+            <p className="text-[10px] text-slate-500 font-medium">Topographic clearance comparison</p>
           </div>
         </div>
-        <span className="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded-full">
+        <span className="text-[10px] font-mono font-bold text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md">
           +8.5m High Ground
         </span>
       </div>
 
       {/* SVG Chart */}
-      <div className="relative overflow-hidden rounded-2xl bg-slate-950/80 border border-slate-800/80 p-2">
+      <div className="relative overflow-hidden rounded-xl bg-slate-50 border border-slate-200/80 p-2">
         <svg
           viewBox={`0 0 ${width} ${height}`}
           className="w-full h-24 overflow-visible"
@@ -89,27 +89,23 @@ export function RouteElevationChart({ safeRoute, idealRoute }: RouteElevationCha
         >
           <defs>
             <linearGradient id="elevGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.45" />
-              <stop offset="100%" stopColor="#0284c7" stopOpacity="0.02" />
-            </linearGradient>
-            <linearGradient id="idealGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#f43f5e" stopOpacity="0.25" />
-              <stop offset="100%" stopColor="#f43f5e" stopOpacity="0.0" />
+              <stop offset="0%" stopColor="#64748b" stopOpacity="0.15" />
+              <stop offset="100%" stopColor="#64748b" stopOpacity="0.02" />
             </linearGradient>
           </defs>
 
           {/* Grid lines */}
-          <line x1={padX} y1={height - padY} x2={width - padX} y2={height - padY} stroke="#334155" strokeWidth="1" strokeDasharray="3 3" />
-          <line x1={padX} y1={padY} x2={width - padX} y2={padY} stroke="#334155" strokeWidth="1" strokeDasharray="3 3" />
+          <line x1={padX} y1={height - padY} x2={width - padX} y2={height - padY} stroke="#e2e8f0" strokeWidth="1" strokeDasharray="3 3" />
+          <line x1={padX} y1={padY} x2={width - padX} y2={padY} stroke="#e2e8f0" strokeWidth="1" strokeDasharray="3 3" />
 
-          {/* Direct Route Area (Hazardous underpass dip) */}
+          {/* Direct Route Line (hazardous dip) */}
           <polyline
             points={idealPathPoints}
             fill="none"
-            stroke="#fb7185"
-            strokeWidth="2"
+            stroke="#94a3b8"
+            strokeWidth="1.5"
             strokeDasharray="4 4"
-            opacity="0.8"
+            opacity="0.7"
           />
 
           {/* Safe Route Area fill */}
@@ -119,8 +115,8 @@ export function RouteElevationChart({ safeRoute, idealRoute }: RouteElevationCha
           <polyline
             points={safePathPoints}
             fill="none"
-            stroke="#38bdf8"
-            strokeWidth="2.5"
+            stroke="#334155"
+            strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
@@ -131,8 +127,8 @@ export function RouteElevationChart({ safeRoute, idealRoute }: RouteElevationCha
               key={i}
               cx={getX(i)}
               cy={getY(s.elev)}
-              r={hoverIndex === i ? 5 : 2.5}
-              className="fill-sky-400 stroke-slate-900 transition-all cursor-pointer"
+              r={hoverIndex === i ? 4 : 2}
+              className="fill-slate-700 stroke-white transition-all cursor-pointer"
               strokeWidth="2"
               onMouseEnter={() => setHoverIndex(i)}
             />
@@ -140,31 +136,31 @@ export function RouteElevationChart({ safeRoute, idealRoute }: RouteElevationCha
         </svg>
 
         {/* Legend */}
-        <div className="flex items-center justify-between text-[10px] text-slate-400 font-medium px-2 pt-1 border-t border-slate-800/80">
+        <div className="flex items-center justify-between text-[10px] text-slate-500 font-medium px-2 pt-1 border-t border-slate-200">
           <div className="flex items-center gap-1.5">
-            <span className="h-2 w-3 rounded-sm bg-sky-400 inline-block" />
-            <span className="text-slate-300 font-semibold">Safe Bypass ({activeSample.elev}m MSL)</span>
+            <span className="h-2 w-3 rounded-sm bg-slate-700 inline-block" />
+            <span className="font-semibold text-slate-700">Safe Bypass ({activeSample.elev}m MSL)</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="h-0.5 w-3 border-t border-dashed border-rose-400 inline-block" />
+            <span className="h-0.5 w-3 border-t border-dashed border-slate-400 inline-block" />
             <span className="text-slate-400">Direct underpass (~{activeSample.idealElev}m)</span>
           </div>
         </div>
       </div>
 
       {/* 3 Telemetry Metrics */}
-      <div className="grid grid-cols-3 gap-2 text-center pt-0.5">
-        <div className="rounded-2xl bg-slate-800/60 border border-slate-700/60 p-2.5">
+      <div className="grid grid-cols-3 gap-2 text-center">
+        <div className="rounded-xl bg-slate-50 border border-slate-200/80 p-2.5">
           <p className="text-[9px] uppercase tracking-wider text-slate-400 font-bold">Clearance</p>
-          <p className="text-xs font-black text-emerald-400 mt-0.5">100% Passable</p>
+          <p className="text-xs font-bold text-slate-900 mt-0.5">100% Passable</p>
         </div>
-        <div className="rounded-2xl bg-slate-800/60 border border-slate-700/60 p-2.5">
+        <div className="rounded-xl bg-slate-50 border border-slate-200/80 p-2.5">
           <p className="text-[9px] uppercase tracking-wider text-slate-400 font-bold">Peak Height</p>
-          <p className="text-xs font-black text-sky-400 mt-0.5">{maxElev} m MSL</p>
+          <p className="text-xs font-bold text-slate-900 mt-0.5">{maxElev} m MSL</p>
         </div>
-        <div className="rounded-2xl bg-slate-800/60 border border-slate-700/60 p-2.5">
+        <div className="rounded-xl bg-slate-50 border border-slate-200/80 p-2.5">
           <p className="text-[9px] uppercase tracking-wider text-slate-400 font-bold">Deep Flood Saved</p>
-          <p className="text-xs font-black text-rose-400 mt-0.5">~{idealRoute.maxDepthCm} cm</p>
+          <p className="text-xs font-bold text-rose-700 mt-0.5">~{idealRoute.maxDepthCm} cm</p>
         </div>
       </div>
     </div>

@@ -8,48 +8,47 @@ import { useMapStore } from '@/store/mapStore';
 
 function SafetyScoreBar({ score, safeRoute, idealRoute }: { score: number; safeRoute?: any; idealRoute?: any }) {
   const label = score >= 81 ? 'High-Ground Safe Clearance' : score >= 61 ? 'Optimal Flood Bypass' : score >= 31 ? 'Moderate Risk' : 'High Risk';
-  const color = score >= 81 ? 'text-emerald-600' : score >= 61 ? 'text-sky-600' : score >= 31 ? 'text-amber-600' : 'text-rose-600';
 
   return (
-    <div className="rounded-3xl bg-slate-50/90 border border-slate-200/80 p-4 space-y-3 select-none">
+    <div className="rounded-2xl bg-white border border-slate-200/90 shadow-sm p-4 space-y-3 select-none">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Route Safety Assessment</p>
-          <p className={['text-xs font-bold mt-0.5', color].join(' ')}>{label}</p>
+          <p className="text-xs font-bold mt-0.5 text-slate-900">{label}</p>
         </div>
         <div className="flex items-baseline gap-1">
-          <span className={['text-3xl font-black leading-none tracking-tight', color].join(' ')}>{score}</span>
+          <span className="text-3xl font-extrabold leading-none tracking-tight text-slate-900">{score}</span>
           <span className="text-xs font-bold text-slate-400">/ 100</span>
         </div>
       </div>
 
-      {/* Multi-segment telemetry progress bar */}
-      <div className="h-2.5 w-full rounded-full bg-slate-200/90 overflow-hidden flex">
+      {/* Progress bar */}
+      <div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden flex">
         <div
-          className="h-full bg-emerald-500 transition-all duration-500"
+          className="h-full bg-slate-800 transition-all duration-500"
           style={{ width: `${Math.max(15, score)}%` }}
           title="Safe corridor clearance"
         />
         <div
-          className="h-full bg-amber-400/80 transition-all duration-500"
+          className="h-full bg-slate-300 transition-all duration-500"
           style={{ width: `${Math.min(25, 100 - score)}%` }}
           title="Surface pooling caution"
         />
       </div>
 
       {/* 3 Metric pills */}
-      <div className="grid grid-cols-3 gap-2 pt-1 text-center">
-        <div className="rounded-2xl bg-white border border-slate-200/60 p-2">
+      <div className="grid grid-cols-3 gap-2 pt-0.5 text-center">
+        <div className="rounded-xl bg-slate-50 border border-slate-200/80 p-2">
           <p className="text-[9px] uppercase tracking-wider text-slate-400 font-bold">Passability</p>
-          <p className="text-xs font-black text-emerald-600 mt-0.5">100% Clear</p>
+          <p className="text-xs font-bold text-slate-900 mt-0.5">100% Clear</p>
         </div>
-        <div className="rounded-2xl bg-white border border-slate-200/60 p-2">
+        <div className="rounded-xl bg-slate-50 border border-slate-200/80 p-2">
           <p className="text-[9px] uppercase tracking-wider text-slate-400 font-bold">Max Water</p>
-          <p className="text-xs font-black text-sky-600 mt-0.5">~{safeRoute?.maxDepthCm ?? 0} cm</p>
+          <p className="text-xs font-bold text-slate-900 mt-0.5 font-mono">~{safeRoute?.maxDepthCm ?? 0} cm</p>
         </div>
-        <div className="rounded-2xl bg-white border border-slate-200/60 p-2">
-          <p className="text-[9px] uppercase tracking-wider text-slate-400 font-bold">Avoided Hazards</p>
-          <p className="text-xs font-black text-rose-600 mt-0.5">{idealRoute?.hazardLocations?.length ?? 0} zones</p>
+        <div className="rounded-xl bg-slate-50 border border-slate-200/80 p-2">
+          <p className="text-[9px] uppercase tracking-wider text-slate-400 font-bold">Avoided</p>
+          <p className="text-xs font-bold text-rose-700 mt-0.5">{idealRoute?.hazardLocations?.length ?? 0} zones</p>
         </div>
       </div>
     </div>
@@ -192,6 +191,7 @@ export function RouteBottomSheet() {
       onSnapDown={() => {
         if (snap === 'full') setSnap('mid');
         else if (snap === 'mid') setSnap('peek');
+        else { clearNavigation(); setAppMode('home'); }
       }}
       className={
         snap === 'peek' ? 'max-h-[340px]' : snap === 'mid' ? 'max-h-[580px]' : 'max-h-[90dvh]'

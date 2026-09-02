@@ -68,7 +68,7 @@ export function BottomSheet({
     const delta = currentTranslateY.current;
     sheetRef.current.style.transition = 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)';
 
-    if (delta > 60) {
+    if (delta > 35) {
       // Trigger snap down or close
       sheetRef.current.style.transform = '';
       if (onSnapDown) {
@@ -114,7 +114,7 @@ export function BottomSheet({
       >
         {/* Interactive Handle area with slide down gesture */}
         <div
-          className="flex-none px-4 pt-3 pb-2 cursor-grab active:cursor-grabbing select-none"
+          className="flex-none px-4 pt-3.5 pb-2.5 cursor-grab active:cursor-grabbing select-none touch-none"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
@@ -129,9 +129,9 @@ export function BottomSheet({
                 else onClose();
               }}
               title="Drag or tap to slide down"
-              className="group mx-auto mb-2 flex h-5 w-16 items-center justify-center cursor-pointer"
+              className="group mx-auto mb-2 flex h-6 w-20 items-center justify-center cursor-pointer"
             >
-              <div className="h-1.5 w-12 rounded-full bg-slate-300 group-hover:bg-slate-400 group-hover:w-14 transition-all" />
+              <div className="h-1.5 w-14 rounded-full bg-slate-300 group-hover:bg-slate-400 group-active:bg-slate-500 group-hover:w-16 transition-all" />
             </div>
           )}
           {title && (
