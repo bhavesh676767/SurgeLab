@@ -75,6 +75,7 @@ export function RoadRiskLayer() {
   const stormIntensity = useMapStore((s) => s.stormIntensity);
   const weather = useMapStore((s) => s.weather);
   const setSelectedTerrain = useMapStore((s) => s.setSelectedTerrain);
+  const showTerrainPaint = useMapStore((s) => s.showTerrainPaint);
 
   useEffect(() => {
     fetch("/data/gurugram_roads.geojson")
@@ -105,7 +106,15 @@ export function RoadRiskLayer() {
 
   const redraw = useCallback(() => {
     const canvas = canvasRef.current;
-    if (!canvas || roadsRef.current.length === 0) return;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d", { alpha: true });
+    if (!ctx) return;
+
+    if (!showTerrainPaint || roadsRef.current.length === 0) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      return;
+    }
 
     const zoom = map.getZoom();
     const allowed = highwaysForZoom(zoom);
@@ -126,9 +135,6 @@ export function RoadRiskLayer() {
       canvas.height = height;
     }
     L.DomUtil.setPosition(canvas, topLeft);
-
-    const ctx = canvas.getContext("2d", { alpha: true });
-    if (!ctx) return;
 
     ctx.clearRect(0, 0, width, height);
 

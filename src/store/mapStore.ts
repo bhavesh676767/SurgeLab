@@ -221,7 +221,7 @@ export const useMapStore = create<MapStore>()(
       userLocationLoading: false,
       programmaticMove: null,
       basemapMode: "satellite",
-      showTerrainPaint: true,
+      showTerrainPaint: false,
       selectedTerrain: null,
 
       // App UI state
@@ -423,6 +423,7 @@ export const useMapStore = create<MapStore>()(
         navSettings: state.navSettings,
         onboardingComplete: state.onboardingComplete,
         layerVisibility: state.layerVisibility,
+        showTerrainPaint: state.showTerrainPaint,
       }),
     }
   )
